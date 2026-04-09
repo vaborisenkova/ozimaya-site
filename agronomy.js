@@ -14,124 +14,114 @@
     stage0: {
       title: "Этап 0 — Подготовка и сев",
       cardTitle: "Подготовка и сев",
-      meta: {
-        season: "Осень",
-        period: "Август — октябрь",
-        bbch: "00–13",
-        nitrogen: null,
-      },
+      meta: { season: "Осень", period: "Август — октябрь", bbch: "до 13", nitrogen: null },
       description:
-        "Подготовка семян, предпосевная обработка, сев. Закладка основ будущего урожая — выбор сорта, протравливание семян, внесение основных удобрений.",
+        "По технологической карте из файла «Озимые_ИИ1.xlsx»: базовое питание перед посевом и протравка/биостимуляция семян.",
       blocks: [
         {
-          type: "fungicide",
-          heading: "Протравливание семян (фунгициды)",
+          type: "nutrition",
+          heading: "Перед посевом",
           items: [
             {
-              name: "Протего Макс, МЭ",
-              norm: "1,0–1,25 л/т",
-              text:
-                "Тройной фунгицидный протравитель (протиоконазол 75 г/л + пираклостробин 25 г/л + тебуконазол 25 г/л). Защита от корневых гнилей, твёрдой и пыльной головни, септориоза проростков.",
-              href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/protraviteli-semyan/fungitsidnye/protego-maks-me/",
-            },
-            {
-              name: "Депозит Суприм, МЭ",
-              norm: "0,5–0,75 л/т",
-              text:
-                "Фунгицидный протравитель для защиты зерновых от комплекса семенных и почвенных инфекций.",
-              href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/protraviteli-semyan/fungitsidnye/depozit-suprim-me/",
+              name: "NPK(S) 5:17:36:2",
+              norm: "200 кг/га",
+              when: "Перед посевом, при основной подготовке почвы (до сева).",
+              text: "Основное внесение до посева.",
+              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/",
             },
           ],
         },
         {
-          type: "insecticide",
-          heading: "Протравливание семян (инсектицид)",
+          type: "fungicide",
+          heading: "Протравка",
           items: [
             {
-              name: "Бомбарда, КС",
-              norm: "0,5–0,75 л/т",
-              text:
-                "Трёхкомпонентный инсектицидный протравитель (тиаметоксам 130 г/л + имидаклоприд 90 г/л + фипронил 60 г/л). Надёжная защита всходов от почвообитающих и наземных вредителей, продолжительная защита по вегетации.",
-              href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/protraviteli-semyan/insektitsidnye/bombarda-ks/",
+              name: "Поларис Кватро",
+              norm: "1,5 л/т",
+              when: "На этапе протравки семян, непосредственно перед посевом.",
+              text: "Фунгицидная обработка семян перед посевом.",
+              href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/protraviteli-semyan/insekto-fungitsidnye/polaris-kvatro-sme/",
             },
           ],
         },
         {
           type: "nutrition",
-          heading: "Стимуляция при севе",
+          heading: "Биостимуляция семян",
           items: [
             {
-              name: "Ультрамаг Фосфор Супер",
-              norm: "1,0–1,5 л/га",
-              text:
-                "Высококонцентрированное фосфорное удобрение для листовых подкормок. Усиливает развитие корневой системы в начальный период.",
-              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/mikroudobreniya/",
+              name: "Биостим Старт",
+              norm: "1,0 л/т",
+              when: "В баковой смеси при протравке семян перед севом.",
+              text: "Стимуляция стартового развития.",
+              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/aminokislotnye-biostimulyatory/biostim_start/",
             },
             {
-              name: "Гумат калия Суфлер",
-              norm: "1,0 л/га",
-              text:
-                "Гуминовое удобрение. Стимулирует прорастание, улучшает укоренение, повышает стрессоустойчивость молодых растений.",
-              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/organomineralnoe-udobrenie/",
+              name: "Гумат калия",
+              norm: "0,7 л/т",
+              when: "В баковой смеси при протравке семян перед севом.",
+              text: "Поддержка энергии прорастания и укоренения.",
+              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/organomineralnoe-udobrenie/gumat_kaliya_sufler/",
             },
           ],
         },
       ],
     },
     stage1: {
-      title: "Этап 1 — Кущение (осень)",
+      title: "Этап 1 — Осенние обработки",
       cardTitle: "Кущение (осень)",
-      meta: {
-        season: "Осень",
-        period: "Октябрь — ноябрь",
-        bbch: "20–29",
-        nitrogen: null,
-      },
+      meta: { season: "Осень", period: "Октябрь — ноябрь", bbch: "13–24", nitrogen: null },
       description:
-        "Осеннее кущение — критический период для защиты от сорняков. Оптимальная фаза для осеннего применения гербицидов и регуляторов роста.",
+        "Обработки №2 и №3 из карты: регулирование роста, гербицидная и фунгицидная защита, микроэлементная поддержка.",
       blocks: [
+        {
+          type: "growth",
+          heading: "Обработка №2 (фаза 13–14)",
+          items: [
+            {
+              name: "Костандо",
+              norm: "0,2 л/га",
+              when: "Осенью в фазе ВВСН 13–14.",
+              text: "Осеннее регулирование роста и укрепление посева.",
+              href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/regulyatory-rosta-rasteniy/costando/",
+            },
+          ],
+        },
         {
           type: "herbicide",
           heading: "Гербицидная защита",
           items: [
             {
-              name: "Пиксель, МД",
-              norm: "0,4–0,5 л/га",
-              text:
-                "Тройной гербицид (тифенсульфурон-метил 90 г/л + флуметсулам 24 г/л + флорасулам 18 г/л). Мягкая защита от широкого спектра двудольных сорняков, применим даже в поздние фазы развития культуры.",
-              href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/gerbitsidy/pixel_md/",
-            },
-            {
-              name: "Азофок",
-              norm: "по регламенту",
-              text: "Гербицид против злаковых и двудольных сорняков в посевах пшеницы осенью.",
-              href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/gerbitsidy/",
+              name: "Азафок",
+              norm: "2,0 л/га",
+              when: "Осенью в фазе ВВСН 13–14 (в составе обработки №2).",
+              text: "Контроль сорняков в осенний период.",
+              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/mikrobiologicheskie-preparaty/azafok/",
             },
           ],
         },
         {
           type: "nutrition",
-          heading: "Микроэлементы (листовая подкормка)",
+          heading: "Микроэлементное питание",
           items: [
             {
-              name: "Ультрамаг комби для зерновых",
-              norm: "1,0–1,5 л/га",
-              text:
-                "Сбалансированный комплекс микроэлементов для листовой подкормки зерновых культур.",
-              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/mikroudobreniya/",
+              name: "Ультрамаг Молибден",
+              norm: "0,9 л/га",
+              when: "Осенью в фазе ВВСН 13–14 (совместно с обработкой №2).",
+              text: "Поддержка обменных процессов в осеннюю вегетацию.",
+              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/mikroudobreniya/ultramag_molibden/",
             },
           ],
         },
         {
-          type: "growth",
-          heading: "Регулятор роста",
+          type: "fungicide",
+          heading: "Обработка №3 (фаза 24)",
           items: [
             {
-              name: "Костандо, КЭ",
-              norm: "0,25–0,5 л/га",
-              text:
-                "Регулятор роста на основе тринексапак-этила. Возможно двукратное применение — осенью и весной. Укрепляет соломину, повышает зимостойкость. Механизм: подавляет синтез гибберелиновой кислоты, уменьшает длину междоузлий, способствует росту корневой системы и утолщению стенок соломины.",
-              href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/regulyatory-rosta-rasteniy/costando/",
+              name: "Беназол",
+              norm: "0,6 л/га",
+              when: "Осенью в фазе ВВСН 24 (обработка №3).",
+              text: "Фунгицидная защита посева в фазе кущения.",
+              href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/fungitsidy/benazol_sp/",
             },
           ],
         },
@@ -143,42 +133,42 @@
       meta: {
         season: "Весна",
         period: "Февраль — март",
-        bbch: "21–25",
-        nitrogen: "Аммиачная селитра (первая весенняя подкормка)",
+        bbch: "25",
+        nitrogen: "Аммиачная селитра — 150 кг/га (первая весенняя подкормка)",
       },
       description:
-        "Первая весенняя подкормка азотными удобрениями. Ранняя фунгицидная защита против перезимовавшей инфекции — корневых гнилей и ранних листовых болезней.",
+        "Обработка №4 по технологической карте: ранневесенняя фунгицидная обработка и стимуляция после перезимовки.",
       blocks: [
         {
           type: "fungicide",
-          heading: "Ранняя фунгицидная обработка (Т1)",
+          heading: "Обработка №4",
           items: [
             {
-              name: "Азорро, КС",
-              norm: "0,8–1,0 л/га",
-              text:
-                "Комбинированный фунгицид (карбендазим 300 г/л + азоксистробин 100 г/л). Уничтожает инфекцию в прикорневой зоне, контролирует ранние листовые болезни. Особо рекомендован для первой весенней фунгицидной обработки озимых. Период защитного действия — 4 недели. Эффект «зелёного листа» и «антистресс». Применяется против: мучнистой росы, ржавчины бурой, септориоза листьев, пиренофороза, церкоспореллёза.",
+              name: "Азорро",
+              norm: "1,0 л/га",
+              when: "Ранней весной в фазе ВВСН 25 (обработка №4).",
+              text: "Ранняя фунгицидная защита в фазе 25.",
               href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/fungitsidy/azorro/",
             },
           ],
         },
         {
           type: "nutrition",
-          heading: "Питание и биостимуляция",
+          heading: "Питание и антистресс",
           items: [
             {
               name: "Ультрамаг Фосфор Супер",
-              norm: "1,0–1,5 л/га",
-              text:
-                "Фосфорное удобрение для листовой подкормки. Активирует отрастание после перезимовки.",
-              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/mikroudobreniya/",
+              norm: "2,0 л/га",
+              when: "Ранней весной в фазе ВВСН 25 (в баковой смеси обработки №4).",
+              text: "Стимулирование весеннего отрастания.",
+              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/makroudobreniya/ultramag-fosfor-super/",
             },
             {
               name: "Гумат калия Суфлер",
-              norm: "1,0 л/га",
-              text:
-                "Антистрессовый эффект при возобновлении вегетации, стимулирует восстановление корневой системы.",
-              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/organomineralnoe-udobrenie/",
+              norm: "0,3 л/га",
+              when: "Ранней весной в фазе ВВСН 25 (в баковой смеси обработки №4).",
+              text: "Антистрессовая поддержка в начале вегетации.",
+              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/organomineralnoe-udobrenie/gumat_kaliya_sufler/",
             },
           ],
         },
@@ -187,44 +177,40 @@
     stage3: {
       title: "Этап 3 — Кущение (весна)",
       cardTitle: "Кущение (весна)",
-      meta: {
-        season: "Весна",
-        period: "Март — апрель",
-        bbch: "25–30",
-        nitrogen: "Аммиачная селитра (вторая весенняя подкормка)",
-      },
+      meta: { season: "Весна", period: "Март — апрель", bbch: "27–29", nitrogen: null },
       description:
-        "Основная гербицидная обработка против сорняков. Подкормка карбамидом или аммиачной селитрой. Применение регуляторов роста для укрепления стебля.",
+        "Обработка №5 из карты: гербицидная защита и листовая подкормка в фазе 27–29.",
       blocks: [
         {
           type: "herbicide",
-          heading: "Гербицидная защита (Т1)",
+          heading: "Обработка №5",
           items: [
             {
-              name: "Пиксель, МД",
-              norm: "0,4–0,5 л/га",
-              text:
-                "Системный гербицид для мягкой защиты пшеницы. Эффективен даже в фазе выхода в трубку, когда препараты на основе 2,4-Д уже нельзя применять.",
+              name: "Пиксель",
+              norm: "0,3 л/га",
+              when: "Весной в фазе ВВСН 27–29 (обработка №5).",
+              text: "Системный контроль двудольных сорняков.",
               href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/gerbitsidy/pixel_md/",
             },
             {
               name: "Азофок",
-              norm: "по регламенту",
-              text: "Дополнительный контроль злаковых сорняков в посевах пшеницы.",
-              href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/gerbitsidy/",
+              norm: "2,0 л/га",
+              when: "Весной в фазе ВВСН 27–29 (в составе обработки №5).",
+              text: "Дополнительный контроль сорной растительности.",
+              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/mikrobiologicheskie-preparaty/azafok/",
             },
           ],
         },
         {
           type: "nutrition",
-          heading: "Микроэлементы (листовая подкормка)",
+          heading: "Листовая подкормка",
           items: [
             {
               name: "Ультрамаг комби для зерновых",
-              norm: "1,0–1,5 л/га",
-              text:
-                "Листовая подкормка комплексом микроэлементов в составе баковой смеси с гербицидом.",
-              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/mikroudobreniya/",
+              norm: "2,0 л/га",
+              when: "Весной в фазе ВВСН 27–29 (листовая подкормка в обработке №5).",
+              text: "Микроэлементы в баковой смеси с гербицидной обработкой.",
+              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/mikroudobreniya/ultramag_combi_zernovie/",
             },
           ],
         },
@@ -236,54 +222,42 @@
       meta: {
         season: "Весна",
         period: "Апрель — май",
-        bbch: "30–37",
-        nitrogen: "Аммиачная селитра (третья подкормка, некорневая)",
+        bbch: "31",
+        nitrogen: "Аммиачная селитра — 150 кг/га (подкормка в фазе 31)",
       },
       description:
-        "Ключевой этап — обработка Т2. Контроль листовых болезней, укрепление стебля регулятором роста, листовая подкормка. Закладывается потенциал урожайности.",
+        "Обработка №6 по карте: регуляция роста, биостимуляция, питание и инсектицидная защита.",
       blocks: [
         {
-          type: "fungicide",
-          heading: "Фунгицидная обработка (Т2)",
-          items: [
-            {
-              name: "Триада, ККР",
-              norm: "0,4–0,6 л/га",
-              text:
-                "Инновационный трёхкомпонентный фунгицид (пропиконазол 140 г/л + тебуконазол 140 г/л + эпоксиконазол 72 г/л). Защита от комплекса листостебельных и колосовых заболеваний. Усиленная фунгицидная активность благодаря уникальной комбинации триазолов.",
-              href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/fungitsidy/triada_kkr/",
-            },
-          ],
-        },
-        {
           type: "growth",
-          heading: "Регулятор роста (Т2)",
+          heading: "Обработка №6",
           items: [
             {
-              name: "Костандо, КЭ",
-              norm: "0,25–0,5 л/га",
-              text:
-                "Вторая обработка весной. Укорачивает нижние междоузлия, снижает риск полегания, утолщает стенки соломины.",
+              name: "Костандо",
+              norm: "0,4 л/га",
+              when: "Весной в фазе ВВСН 31 (обработка №6).",
+              text: "Регуляция роста и снижение риска полегания.",
               href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/regulyatory-rosta-rasteniy/costando/",
             },
           ],
         },
         {
           type: "nutrition",
-          heading: "Питание и биостимуляция",
+          heading: "Биостимуляция и питание",
           items: [
             {
-              name: "Биостим Зерновой",
-              norm: "1,0–2,0 л/га",
-              text:
-                "Жидкое аминокислотное удобрение-биостимулятор (аминокислоты + макро- и микроэлементы). Усиливает ростовые процессы в период трубкования, повышает стрессоустойчивость.",
+              name: "Биостим зерновой",
+              norm: "2,0 л/га",
+              when: "Весной в фазе ВВСН 31 (в составе обработки №6).",
+              text: "Поддержка активного роста в трубковании.",
               href: "https://betaren.ru/catalog/spetsialnye-udobreniya/aminokislotnye-biostimulyatory/biostim_zernovoy/",
             },
             {
               name: "Арго Прим",
-              norm: "по регламенту",
-              text: "Листовое удобрение для подкормки зерновых в период активного роста.",
-              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/",
+              norm: "0,5 л/га",
+              when: "Весной в фазе ВВСН 31 (в составе обработки №6).",
+              text: "Листовое питание по карте обработок.",
+              href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/gerbitsidy/argo-prim-me/",
             },
           ],
         },
@@ -292,11 +266,11 @@
           heading: "Инсектицидная защита",
           items: [
             {
-              name: "Фаскорд, КЭ",
-              norm: "0,1–0,15 л/га",
-              text:
-                "Пиретроидный инсектицид. Защита от вредителей в период трубкования (хлебный пилильщик, трипсы, злаковые мухи).",
-              href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/insektitsidy-i-akaritsidy/",
+              name: "Фаскорд",
+              norm: "0,15 л/га",
+              when: "Весной в фазе ВВСН 31 (в составе обработки №6).",
+              text: "Защита посева от комплекса вредителей.",
+              href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/insektitsidy-i-akaritsidy/faskord_ke/",
             },
           ],
         },
@@ -305,58 +279,53 @@
     stage5: {
       title: "Этап 5 — Флаговый лист",
       cardTitle: "Флаговый лист",
-      meta: {
-        season: "Весна / начало лета",
-        period: "Май",
-        bbch: "37–51",
-        nitrogen: null,
-      },
+      meta: { season: "Весна / начало лета", period: "Май", bbch: "39", nitrogen: null },
       description:
-        "Защита флагового и подфлагового листа — ключевых органов формирования урожая. Фунгицидная обработка Т3 и инсектицидная защита от вредителей колоса.",
+        "Обработка №7 по технологической карте: фунгицид + биостимуляция + гумат + инсектицид.",
       blocks: [
         {
           type: "fungicide",
-          heading: "Фунгицидная обработка (Т3)",
+          heading: "Обработка №7",
           items: [
             {
-              name: "Триада, ККР",
-              norm: "0,5–0,6 л/га",
-              text:
-                "Защита флагового листа и подфлагового листа от септориоза, бурой ржавчины, мучнистой росы. Широкий спектр действия.",
+              name: "Триада",
+              norm: "0,6 л/га",
+              when: "Весной в фазе ВВСН 39 (обработка №7).",
+              text: "Фунгицидная защита листового аппарата в фазе 39.",
               href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/fungitsidy/triada_kkr/",
             },
           ],
         },
         {
           type: "nutrition",
-          heading: "Питание и биостимуляция",
+          heading: "Биостимуляция",
           items: [
             {
-              name: "Биостим Универсал",
-              norm: "1,5–2,0 л/га",
-              text:
-                "Универсальный аминокислотный биостимулятор. Повышает закладку зерна в колосе, снижает стресс от жары и засухи.",
-              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/aminokislotnye-biostimulyatory/",
+              name: "Биостим универсал",
+              norm: "0,5 л/га",
+              when: "Весной в фазе ВВСН 39 (в составе обработки №7).",
+              text: "Поддержка продуктивности в период формирования урожая.",
+              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/aminokislotnye-biostimulyatory/biostim_universal/",
             },
             {
               name: "Гумат калия Суфлер",
-              norm: "1,0 л/га",
-              text:
-                "Поддерживает физиологические процессы в критический период закладки зерна.",
-              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/organomineralnoe-udobrenie/",
+              norm: "0,5 л/га",
+              when: "Весной в фазе ВВСН 39 (в составе обработки №7).",
+              text: "Антистрессовая поддержка культуры.",
+              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/organomineralnoe-udobrenie/gumat_kaliya_sufler/",
             },
           ],
         },
         {
           type: "insecticide",
-          heading: "Инсектицидная защита",
+          heading: "Инсектицид",
           items: [
             {
-              name: "Фаскорд, КЭ",
-              norm: "0,1–0,15 л/га",
-              text:
-                "Инсектицидная защита от вредной черепашки, тлей, трипсов в период колошения.",
-              href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/insektitsidy-i-akaritsidy/",
+              name: "Фаскорд",
+              norm: "0,15 л/га",
+              when: "Весной в фазе ВВСН 39 (в составе обработки №7).",
+              text: "Контроль вредителей в ключевой фазе формирования урожая.",
+              href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/insektitsidy-i-akaritsidy/faskord_ke/",
             },
           ],
         },
@@ -368,42 +337,42 @@
       meta: {
         season: "Лето",
         period: "Май — июнь",
-        bbch: "51–69",
-        nitrogen: "Карбамид (некорневая подкормка для повышения качества зерна)",
+        bbch: "53–57",
+        nitrogen: "Карбамид — 20 кг/га (листовая подкормка)",
       },
       description:
-        "Защита колоса от фузариоза и других болезней. Листовые подкормки карбамидом для повышения белка и клейковины. Инсектицидная защита от вредителей колоса.",
+        "Обработка №8 (летняя): фунгицидная защита колоса, питание и инсектицид в одной технологической операции.",
       blocks: [
         {
           type: "fungicide",
-          heading: "Фунгицидная обработка колоса (Т4)",
+          heading: "Фунгицидная защита колоса",
           items: [
             {
-              name: "Эйс, ККР",
-              norm: "0,75–1,0 л/га",
-              text:
-                "Трёхкомпонентный фунгицид в НАНОформуляции (протиоконазол + тебуконазол + азоксистробин). Единственный в России препарат с регистрацией против гибеллинозной корневой гнили. Широкий спектр: фузариоз колоса, септориоз, пиренофороз, ржавчины, мучнистая роса, пятнистости, ринхоспориоз, церкоспореллёз, сетчатая пятнистость ячменя. Применять в начале цветения (ВВСН 61–65) — работа на опережение.",
+              name: "Эйс",
+              norm: "1,0 л/га",
+              when: "Летом в фазе ВВСН 53–57 (обработка №8).",
+              text: "Защита колоса в фазе 53–57.",
               href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/fungitsidy/eys_kkr/",
             },
           ],
         },
         {
           type: "nutrition",
-          heading: "Питание (листовые подкормки)",
+          heading: "Питание",
           items: [
             {
               name: "Ультрамаг Фосфор Супер",
-              norm: "1,0–1,5 л/га",
-              text:
-                "Фосфорное питание в период налива. Способствует формированию полновесного зерна.",
-              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/mikroudobreniya/",
+              norm: "2,0 л/га",
+              when: "Летом в фазе ВВСН 53–57 (в составе обработки №8).",
+              text: "Фосфорная поддержка в летний период.",
+              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/makroudobreniya/ultramag-fosfor-super/",
             },
             {
               name: "Ультрамаг Сера 900",
-              norm: "1,0 л/га",
-              text:
-                "Высококонцентрированное серное удобрение. Сера необходима для синтеза клейковины и улучшения хлебопекарного качества зерна.",
-              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/mikroudobreniya/",
+              norm: "2,0 л/га",
+              when: "Летом в фазе ВВСН 53–57 (в составе обработки №8).",
+              text: "Серное питание для качества зерна.",
+              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/makroudobreniya/ultramag-super-sera-900/",
             },
           ],
         },
@@ -412,10 +381,10 @@
           heading: "Инсектицидная защита",
           items: [
             {
-              name: "Эсперо, КС",
-              norm: "0,15–0,18 л/га",
-              text:
-                "Комбинированный инсектицид (имидаклоприд + альфа-циперметрин) продолжительного действия. Контроль вредителей в период колошения и цветения.",
+              name: "Эсперо",
+              norm: "0,1 л/га",
+              when: "Летом в фазе ВВСН 53–57 (в составе обработки №8).",
+              text: "Контроль вредителей в летний период.",
               href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/insektitsidy-i-akaritsidy/espero_ks/",
             },
           ],
@@ -425,32 +394,20 @@
     stage7: {
       title: "Этап 7 — Налив зерна",
       cardTitle: "Налив зерна",
-      meta: {
-        season: "Лето",
-        period: "Июнь — июль",
-        bbch: "70–89",
-        nitrogen: null,
-      },
+      meta: { season: "Лето", period: "Июнь — июль", bbch: "70–89", nitrogen: null },
       description:
-        "Период налива зерна и созревания. При превышении ЭПВ (экономического порога вредоносности) — инсектицидная защита от вредной черепашки. Мониторинг болезней колоса.",
+        "В карте «Озимые_ИИ1.xlsx» отдельная плановая обработка на этой стадии не выделена. Этап ведётся как мониторинг состояния посева и оценка необходимости внеплановых обработок по ЭПВ.",
       blocks: [
         {
           type: "insecticide",
-          heading: "Инсектицидная защита",
+          heading: "Мониторинг и решения по ЭПВ",
           items: [
             {
-              name: "Эсперо, КС",
-              norm: "0,15–0,18 л/га",
-              text:
-                "Применяется при превышении ЭПВ вредной черепашки в фазе молочной спелости зерна (против личинок 3–5 возраста).",
-              href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/insektitsidy-i-akaritsidy/espero_ks/",
-            },
-            {
-              name: "Беретта, МД",
-              norm: "0,1–0,15 л/га",
-              text:
-                "Трёхкомпонентный инсектицид в масляной формуляции (бифентрин 60 г/л + тиаметоксам 40 г/л + альфа-циперметрин 30 г/л). Контроль особо вредоносных насекомых с продолжительным защитным периодом.",
-              href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/insektitsidy-i-akaritsidy/beretta-md/",
+              name: "Контроль вредителей и болезней",
+              norm: "по факту",
+              when: "В фазе налива зерна (ВВСН 70–89), при превышении ЭПВ.",
+              text: "При превышении порогов вредоносности выполняются корректирующие обработки.",
+              href: "https://betaren.ru/cultivation/zernovye-kultury/pshenitsa-ozimaya/",
             },
           ],
         },
@@ -486,8 +443,11 @@
         if (item.norm) {
           html += ` <span class="text-gray-600">— Норма: ${item.norm}</span>`;
         }
-        html += `</div>
-        <p class="mt-1.5 text-gray-700 leading-relaxed">${item.text}</p>`;
+        html += `</div>`;
+        if (item.when) {
+          html += `<p class="mt-1 text-xs text-gray-500"><span class="font-semibold">Когда вносить:</span> ${item.when}</p>`;
+        }
+        html += `<p class="mt-1.5 text-gray-700 leading-relaxed">${item.text}</p>`;
         if (item.href) {
           html += `<a href="${item.href}" target="_blank" rel="noopener noreferrer" class="mt-2 inline-block text-green-700 hover:text-green-800 hover:underline text-xs font-semibold">Карточка на betaren.ru →</a>`;
         }

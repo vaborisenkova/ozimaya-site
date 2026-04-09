@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow, noarchive">
     <title>озимая.рф - Портал Озимой Пшеницы</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -23,7 +24,10 @@
         }
 
         body {
-            background-color: var(--color-bg);
+            background:
+                radial-gradient(1000px 500px at 0% -10%, rgba(21, 128, 61, 0.12), transparent 60%),
+                radial-gradient(800px 420px at 100% -20%, rgba(202, 138, 4, 0.10), transparent 60%),
+                var(--color-bg);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
@@ -67,6 +71,40 @@
             color: var(--color-primary);
             font-weight: 600;
         }
+
+        header {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.88);
+        }
+
+        main {
+            background: rgba(255, 255, 255, 0.46);
+            border: 1px solid rgba(255, 255, 255, 0.55);
+            border-radius: 1.25rem;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+        }
+
+        main .bg-white {
+            border-radius: 1rem;
+            border-color: #e6edf4;
+            box-shadow: 0 8px 26px rgba(15, 23, 42, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        main .bg-white:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(15, 23, 42, 0.10);
+        }
+
+        button:not(.nav-btn) {
+            transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+        }
+
+        button:not(.nav-btn):hover {
+            transform: translateY(-1px);
+            filter: saturate(1.05);
+        }
     </style>
 </head>
 <body class="text-gray-800 antialiased flex flex-col min-h-screen">
@@ -80,7 +118,7 @@
         </div>
     </div>
 
-    <header class="bg-white shadow-md sticky top-0 z-50 border-b border-green-100">
+    <header class="shadow-md sticky top-0 z-50 border-b border-green-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex-shrink-0 flex items-center gap-2 sm:gap-3 cursor-pointer" onclick="navigate('home')">
@@ -90,16 +128,15 @@
                     </div>
                 </div>
                 <nav class="hidden md:flex space-x-8 h-full items-center">
-                    <button onclick="navigate('home')" class="nav-btn active h-full px-2 text-gray-600 hover:text-green-700 transition" data-target="home">Продажи</button>
+                    <button onclick="navigate('home')" class="nav-btn active h-full px-2 text-gray-600 hover:text-green-700 transition" data-target="home">Главная</button>
                     <button onclick="navigate('catalog')" class="nav-btn h-full px-2 text-gray-600 hover:text-green-700 transition" data-target="catalog">Каталог сортов</button>
                     <button onclick="navigate('agronomy')" class="nav-btn h-full px-2 text-gray-600 hover:text-green-700 transition" data-target="agronomy">Агрономия</button>
                     <button onclick="navigate('genetics')" class="nav-btn h-full px-2 text-gray-600 hover:text-green-700 transition" data-target="genetics">Селекция</button>
                     <button onclick="navigate('market')" class="nav-btn h-full px-2 text-gray-600 hover:text-green-700 transition" data-target="market">Рынок</button>
-                    <button onclick="navigate('tools')" class="nav-btn h-full px-2 text-gray-600 hover:text-green-700 transition" data-target="tools">Инструменты</button>
+                    <button onclick="goToTools()" class="nav-btn h-full px-2 text-gray-600 hover:text-green-700 transition" data-target="home">Инструменты</button>
                 </nav>
                 <div class="hidden md:flex items-center space-x-4">
                     <button onclick="goToLeadForm()" class="bg-yellow-500 hover:bg-yellow-400 text-green-900 px-4 py-2 rounded-lg text-sm font-bold transition shadow-sm">Получить КП</button>
-                    <span class="text-sm text-gray-400">RU | EN</span>
                 </div>
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-btn" class="text-gray-600 hover:text-green-700 focus:outline-none text-2xl">
@@ -110,21 +147,21 @@
         </div>
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <button onclick="navigate('home')" class="block w-full text-left px-3 py-2 text-green-700 font-medium" data-target="home">Продажи</button>
+                <button onclick="navigate('home')" class="block w-full text-left px-3 py-2 text-green-700 font-medium" data-target="home">Главная</button>
                 <button onclick="navigate('catalog')" class="block w-full text-left px-3 py-2 text-gray-600" data-target="catalog">Каталог сортов</button>
                 <button onclick="navigate('agronomy')" class="block w-full text-left px-3 py-2 text-gray-600" data-target="agronomy">Агрономия</button>
                 <button onclick="navigate('genetics')" class="block w-full text-left px-3 py-2 text-gray-600" data-target="genetics">Селекция</button>
                 <button onclick="navigate('market')" class="block w-full text-left px-3 py-2 text-gray-600" data-target="market">Рынок</button>
-                <button onclick="navigate('tools')" class="block w-full text-left px-3 py-2 text-gray-600" data-target="tools">Инструменты</button>
+                <button onclick="goToTools()" class="block w-full text-left px-3 py-2 text-gray-600" data-target="home">Инструменты</button>
                 <button onclick="goToLeadForm()" class="block w-full text-left px-3 py-2 bg-yellow-500 text-green-900 font-bold rounded-md mt-2">Получить КП</button>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full mt-4 mb-6">
 
         <section id="view-home" class="view-section active">
-            <div class="bg-gradient-to-r from-green-800 to-green-600 rounded-2xl p-8 mb-8 text-white shadow-lg relative overflow-hidden border border-green-700">
+            <div class="bg-gradient-to-r from-green-900 via-green-800 to-emerald-700 rounded-3xl p-8 mb-8 text-white shadow-2xl relative overflow-hidden border border-green-700">
                 <div class="absolute -right-10 -top-10 text-9xl opacity-10">🌾</div>
                 <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
                     <img src="images/shchelkovo-logo.png" alt="Щелково Агрохим" class="h-12 sm:h-14 w-auto max-w-[min(100%,220px)] object-contain object-left bg-white/95 rounded-lg px-3 py-2 shadow-sm" width="200" height="61" loading="eager">
@@ -164,7 +201,8 @@
                     <div class="text-4xl mr-4 bg-blue-50 p-3 rounded-lg text-blue-600">🎯</div>
                     <div>
                         <p class="text-sm text-gray-500 font-medium">Целевой результат</p>
-                        <p class="text-2xl font-bold text-gray-800">до 165.7 ц/га</p>
+                        <p class="text-2xl font-bold text-gray-800">140,2 ц/га</p>
+                        <a href="https://betaren.ru/news/ermolovka-i-sistema-dlya-maksimalnoy-produktivnosti-teyri-dlya-vysokogo-belka/" target="_blank" rel="noopener noreferrer" class="mt-1 inline-block text-xs font-semibold text-green-700 hover:underline">Книга рекордов России, 2025 г. →</a>
                     </div>
                 </div>
             </div>
@@ -187,6 +225,40 @@
                 </form>
                 <div id="lead-result" class="hidden mt-4 p-3 rounded bg-green-50 border border-green-200 text-sm text-green-800"></div>
             </div>
+            <div id="home-tools-anchor" class="mt-8"></div>
+
+            <section class="mt-8">
+                <div class="flex items-center justify-between gap-3 mb-4">
+                    <h2 class="text-2xl font-bold text-gray-800">Новости betaren.ru</h2>
+                    <a href="https://betaren.ru/news/" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold text-green-700 hover:text-green-800 hover:underline">Все новости →</a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <article class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                        <p class="text-xs text-gray-500 mb-2">07.04.2026</p>
+                        <h3 class="font-bold text-gray-900 leading-snug">«Щёлково Агрохим» испытает на Урале новый сорт рапса с устойчивостью к имидазолинонам</h3>
+                        <p class="text-sm text-gray-600 mt-2">Планы по расширению линейки российских семян представлены на выставке «Тюмень-Агро 2026».</p>
+                        <a href="https://betaren.ru/news/shchyelkovo-agrokhim-ispytaet-na-urale-novyy-sort-rapsa-s-ustoychivostyu-k-imidazolinonam/" target="_blank" rel="noopener noreferrer" class="inline-block mt-3 text-sm font-semibold text-green-700 hover:text-green-800 hover:underline">Открыть новость</a>
+                    </article>
+                    <article class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                        <p class="text-xs text-gray-500 mb-2">07.04.2026</p>
+                        <h3 class="font-bold text-gray-900 leading-snug">Элитные семеноводческие хозяйства Алтайского края выбирают ЭЙС, ККР от «Щёлково Агрохим»</h3>
+                        <p class="text-sm text-gray-600 mt-2">На агроконференции в Алтайском ГАУ представлен акцент на защиту яровой пшеницы от фузариоза.</p>
+                        <a href="https://betaren.ru/news/elitnye-semenovodcheskie-khozyaystva-altayskogo-kraya-vybirayut-eys-kkr-ot-shchyelkovo-agrokhim/" target="_blank" rel="noopener noreferrer" class="inline-block mt-3 text-sm font-semibold text-green-700 hover:text-green-800 hover:underline">Открыть новость</a>
+                    </article>
+                    <article class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                        <p class="text-xs text-gray-500 mb-2">02.04.2026</p>
+                        <h3 class="font-bold text-gray-900 leading-snug">«Кречет»: когда результат говорит сам за себя</h3>
+                        <p class="text-sm text-gray-600 mt-2">Гибрид подсолнечника «Кречет» вошел в тройку самых востребованных отечественных гибридов по объёмам высева.</p>
+                        <a href="https://betaren.ru/news/krechet-kogda-rezultat-govorit-sam-za-sebya/" target="_blank" rel="noopener noreferrer" class="inline-block mt-3 text-sm font-semibold text-green-700 hover:text-green-800 hover:underline">Открыть новость</a>
+                    </article>
+                    <article class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                        <p class="text-xs text-gray-500 mb-2">27.03.2026</p>
+                        <h3 class="font-bold text-gray-900 leading-snug">Салис Каракотов: «Мечтаю, чтобы фермеры были счастливыми людьми!»</h3>
+                        <p class="text-sm text-gray-600 mt-2">Интервью о самых урожайных сортах и гибридах на Всероссийском съезде фермерских хозяйств в Казани.</p>
+                        <a href="https://betaren.ru/news/salis-karakotov-mechtayu-chtoby-fermery-byli-schastlivymi-lyudmi-/" target="_blank" rel="noopener noreferrer" class="inline-block mt-3 text-sm font-semibold text-green-700 hover:text-green-800 hover:underline">Открыть новость</a>
+                    </article>
+                </div>
+            </section>
         </section>
 
         <section id="view-catalog" class="view-section">
@@ -225,42 +297,37 @@
                     <button type="button" data-agronomy-stage="stage0" class="stage-card bg-slate-50 rounded-lg p-3 border border-slate-200 hover:shadow-md transition cursor-pointer text-left" onclick="showAgronomyDetail('stage0', this)">
                         <div class="text-lg font-bold text-slate-600 mb-1">0</div>
                         <h3 class="font-bold text-sm leading-snug text-gray-900">Подготовка и сев</h3>
-                        <p class="text-xs text-gray-600 mt-1">Авг–окт · ВВСН 00–13</p>
+                        <p class="text-xs text-gray-600 mt-1">Авг–окт · ВВСН до 13</p>
                     </button>
                     <button type="button" data-agronomy-stage="stage1" class="stage-card bg-amber-50 rounded-lg p-3 border border-amber-200 hover:shadow-md transition cursor-pointer text-left" onclick="showAgronomyDetail('stage1', this)">
                         <div class="text-lg font-bold text-amber-800 mb-1">1</div>
                         <h3 class="font-bold text-sm leading-snug text-amber-950">Кущение (осень)</h3>
-                        <p class="text-xs text-amber-900/80 mt-1">Окт–ноя · ВВСН 20–29</p>
+                        <p class="text-xs text-amber-900/80 mt-1">Окт–ноя · ВВСН 13–24</p>
                     </button>
                     <button type="button" data-agronomy-stage="stage2" class="stage-card bg-green-50 rounded-lg p-3 border border-green-200 hover:shadow-md transition cursor-pointer text-left" onclick="showAgronomyDetail('stage2', this)">
                         <div class="text-lg font-bold text-green-800 mb-1">2</div>
                         <h3 class="font-bold text-sm leading-snug text-green-950">Возобновление (весна)</h3>
-                        <p class="text-xs text-green-900/80 mt-1">Фев–мар · ВВСН 21–25</p>
+                        <p class="text-xs text-green-900/80 mt-1">Фев–мар · ВВСН 25</p>
                     </button>
                     <button type="button" data-agronomy-stage="stage3" class="stage-card bg-emerald-50 rounded-lg p-3 border border-emerald-200 hover:shadow-md transition cursor-pointer text-left" onclick="showAgronomyDetail('stage3', this)">
                         <div class="text-lg font-bold text-emerald-800 mb-1">3</div>
                         <h3 class="font-bold text-sm leading-snug text-emerald-950">Кущение (весна)</h3>
-                        <p class="text-xs text-emerald-900/80 mt-1">Мар–апр · ВВСН 25–30</p>
+                        <p class="text-xs text-emerald-900/80 mt-1">Мар–апр · ВВСН 27–29</p>
                     </button>
                     <button type="button" data-agronomy-stage="stage4" class="stage-card bg-lime-50 rounded-lg p-3 border border-lime-300 hover:shadow-md transition cursor-pointer text-left" onclick="showAgronomyDetail('stage4', this)">
                         <div class="text-lg font-bold text-lime-800 mb-1">4</div>
                         <h3 class="font-bold text-sm leading-snug text-gray-900">Выход в трубку</h3>
-                        <p class="text-xs text-gray-600 mt-1">Апр–май · ВВСН 30–37</p>
+                        <p class="text-xs text-gray-600 mt-1">Апр–май · ВВСН 31</p>
                     </button>
                     <button type="button" data-agronomy-stage="stage5" class="stage-card bg-teal-50 rounded-lg p-3 border border-teal-200 hover:shadow-md transition cursor-pointer text-left" onclick="showAgronomyDetail('stage5', this)">
                         <div class="text-lg font-bold text-teal-800 mb-1">5</div>
                         <h3 class="font-bold text-sm leading-snug text-teal-950">Флаговый лист</h3>
-                        <p class="text-xs text-teal-900/80 mt-1">Май · ВВСН 37–51</p>
+                        <p class="text-xs text-teal-900/80 mt-1">Май · ВВСН 39</p>
                     </button>
                     <button type="button" data-agronomy-stage="stage6" class="stage-card bg-yellow-50 rounded-lg p-3 border border-yellow-200 hover:shadow-md transition cursor-pointer text-left" onclick="showAgronomyDetail('stage6', this)">
                         <div class="text-lg font-bold text-yellow-800 mb-1">6</div>
                         <h3 class="font-bold text-sm leading-snug text-yellow-950">Колошение и цветение</h3>
-                        <p class="text-xs text-yellow-900/80 mt-1">Май–июн · ВВСН 51–69</p>
-                    </button>
-                    <button type="button" data-agronomy-stage="stage7" class="stage-card bg-orange-50 rounded-lg p-3 border border-orange-200 hover:shadow-md transition cursor-pointer text-left" onclick="showAgronomyDetail('stage7', this)">
-                        <div class="text-lg font-bold text-orange-800 mb-1">7</div>
-                        <h3 class="font-bold text-sm leading-snug text-orange-950">Налив зерна</h3>
-                        <p class="text-xs text-orange-900/80 mt-1">Июн–июл · ВВСН 70–89</p>
+                        <p class="text-xs text-yellow-900/80 mt-1">Май–июн · ВВСН 53–57</p>
                     </button>
                 </div>
 
@@ -386,46 +453,125 @@
                 <div class="rounded-2xl border border-green-200 bg-gradient-to-br from-green-50 to-white p-6 md:p-8 shadow-sm">
                     <h2 class="text-xl font-bold text-gray-800 mb-3">Создатель сортов</h2>
                     <p class="text-sm text-gray-600 mb-4">Ключевые позиции линейки озимой пшеницы созданы и развиваются в рамках селекционной школы «Щелково Агрохим» под руководством ведущего селекционера.</p>
-                    <div class="border-l-4 border-green-600 pl-4">
-                        <p class="font-bold text-gray-900">Прянишников Александр Иванович</p>
-                        <p class="text-sm text-gray-600 mt-1">Директор департамента селекции и семеноводства сельскохозяйственных культур</p>
-                        <p class="text-sm text-gray-600">Доктор сельскохозяйственных наук</p>
-                        <p class="text-sm text-gray-600">Член-корреспондент РАН</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+                        <img src="images/pryanishnikov.png" alt="Прянишников Александр Иванович" class="w-full max-w-xs md:max-w-none rounded-xl border border-green-100 shadow-sm object-cover md:col-span-1" loading="lazy">
+                        <div class="border-l-4 border-green-600 pl-4 md:col-span-2">
+                            <p class="font-bold text-gray-900">Прянишников Александр Иванович</p>
+                            <p class="text-sm text-gray-600 mt-1">Директор департамента селекции и семеноводства сельскохозяйственных культур</p>
+                            <p class="text-sm text-gray-600">Доктор сельскохозяйственных наук</p>
+                            <p class="text-sm text-gray-600">Член-корреспондент РАН</p>
+                        </div>
                     </div>
-                    <p class="text-sm text-gray-600 mt-4">Александр Иванович — один из авторов засухоустойчивого сорта <strong>Изумруд Дубовицкого</strong> и ряда адаптивных линий, востребованных в Поволжье и южных регионах; в селекции сочетаются работа с продуктивностью, качеством зерна и устойчивостью к абиотическим стрессам.</p>
+                    <p class="text-sm text-gray-600 mt-4">Научные интересы Александра Ивановича охватывают генетику и селекцию озимой пшеницы, развитие научных основ адаптивной селекции и ключевых подходов адаптивного растениеводства.</p>
+                    <p class="text-sm text-gray-600 mt-3">В практической работе он участвует в создании сортов озимой пшеницы, сои и подсолнечника, а также в их широком экологическом испытании в разных почвенно-климатических условиях. Отдельное направление — совершенствование методологических подходов селекции для повышения устойчивости и стабильности урожая.</p>
                 </div>
             </div>
         </section>
 
         <section id="view-market" class="view-section">
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">Рынок и Экономика</h1>
-            <p class="text-gray-600 mb-8 max-w-4xl text-lg">Интерактивный анализ рыночных тенденций. Линейный график демонстрирует динамику экспортных цен FOB на пшеницу (протеин 12.5%). Изучение этих данных критически важно для определения оптимальных сроков реализации урожая.</p>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Рынок и аналитика</h1>
+            <p class="text-gray-600 mb-6 max-w-4xl text-lg">Ключевые рыночные ориентиры и оперативная аналитика по зерновому рынку: цены, экспортные тренды, погодные риски и практические рекомендации для принятия решений.</p>
 
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
+                <div class="bg-white p-4 rounded-xl border border-gray-100">
+                    <p class="text-xs text-gray-500">Пшеница, CBOT</p>
+                    <p class="text-xl font-black text-gray-900">$220/т</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-gray-100">
+                    <p class="text-xs text-gray-500">Соя, CBOT</p>
+                    <p class="text-xl font-black text-gray-900">$426/т</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-gray-100">
+                    <p class="text-xs text-gray-500">Подсолнечник, FOB ЧМ</p>
+                    <p class="text-xl font-black text-gray-900">~$460/т</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-gray-100">
+                    <p class="text-xs text-gray-500">Кукуруза, CBOT</p>
+                    <p class="text-xl font-black text-gray-900">$177/т</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-gray-100 col-span-2 md:col-span-1">
+                    <p class="text-xs text-gray-500">USD/RUB, ЦБ</p>
+                    <p class="text-xl font-black text-gray-900">78.3</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
+                <p class="text-xs font-semibold uppercase tracking-wide text-red-600 mb-2">Главное • 5 апреля 2026</p>
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Экспорт пшеницы из РФ: прогноз по итогам I квартала</h2>
+                <p class="text-sm text-gray-700">Россия поставила за рубеж ~14 млн тонн пшеницы за I квартал (оценка по аналогии с 2024). Основные покупатели: Турция, Египет, Бангладеш.</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white p-4 rounded-xl border border-gray-100">
+                    <p class="text-xs text-gray-500">Площадь посевов</p>
+                    <p class="text-2xl font-black text-gray-900">1.2 млн га</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-gray-100">
+                    <p class="text-xs text-gray-500">Урожайность пшеницы</p>
+                    <p class="text-2xl font-black text-gray-900">4.8 т/га</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-gray-100">
+                    <p class="text-xs text-gray-500">NDVI</p>
+                    <p class="text-2xl font-black text-gray-900">0.72</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-gray-100">
+                    <p class="text-xs text-gray-500">Влажность почвы</p>
+                    <p class="text-2xl font-black text-gray-900">68% НВ</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-3">Регионы мониторинга</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 rounded-full bg-gray-100 text-sm text-gray-700">Орёл</span>
+                    <span class="px-3 py-1 rounded-full bg-gray-100 text-sm text-gray-700">Курск</span>
+                    <span class="px-3 py-1 rounded-full bg-gray-100 text-sm text-gray-700">Белгород</span>
+                    <span class="px-3 py-1 rounded-full bg-gray-100 text-sm text-gray-700">Воронеж</span>
+                    <span class="px-3 py-1 rounded-full bg-gray-100 text-sm text-gray-700">Тамбов</span>
+                    <span class="px-3 py-1 rounded-full bg-gray-100 text-sm text-gray-700">Липецк</span>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-3">Прогноз на 5 дней</h3>
+                <div class="grid grid-cols-3 md:grid-cols-6 gap-3 text-center">
+                    <div class="p-3 rounded-lg bg-gray-50 border border-gray-100"><p class="text-xs text-gray-500">Сегодня</p><p class="font-semibold">—</p></div>
+                    <div class="p-3 rounded-lg bg-gray-50 border border-gray-100"><p class="text-xs text-gray-500">+1 день</p><p class="font-semibold">—</p></div>
+                    <div class="p-3 rounded-lg bg-gray-50 border border-gray-100"><p class="text-xs text-gray-500">+2 дня</p><p class="font-semibold">—</p></div>
+                    <div class="p-3 rounded-lg bg-gray-50 border border-gray-100"><p class="text-xs text-gray-500">+3 дня</p><p class="font-semibold">—</p></div>
+                    <div class="p-3 rounded-lg bg-gray-50 border border-gray-100"><p class="text-xs text-gray-500">+4 дня</p><p class="font-semibold">—</p></div>
+                    <div class="p-3 rounded-lg bg-gray-50 border border-gray-100"><p class="text-xs text-gray-500">+5 дней</p><p class="font-semibold">—</p></div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold">Динамика цен FOB (Черное море)</h2>
+                    <h2 class="text-xl font-bold">Пшеница FOB: динамика цены</h2>
                     <select class="border border-gray-300 rounded p-2 text-sm focus:outline-none focus:border-green-500">
                         <option>За 6 месяцев</option>
                         <option>За 1 год</option>
-                        <option>За 3 года</option>
+                        <option>За 2 года</option>
                     </select>
                 </div>
                 <div class="chart-container">
                     <canvas id="priceChart"></canvas>
                 </div>
+            </div>
 
-                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 border-t pt-6">
-                    <div>
-                        <h3 class="font-bold text-gray-800 mb-2">Краткая аналитика</h3>
-                        <p class="text-sm text-gray-600 leading-relaxed">В третьем квартале наблюдается стабилизация цен после весеннего пика, вызванного климатическими опасениями. Прогнозы на новый урожай оказывают давление на рынок, однако высокий спрос со стороны импортеров удерживает котировки от глубокого падения.</p>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h3 class="text-lg font-bold text-gray-800 mb-3">Частые вопросы</h3>
+                <div class="space-y-3 text-sm">
+                    <div class="p-3 rounded-lg bg-gray-50 border border-gray-100">
+                        <p class="font-semibold text-gray-800">Какая оптимальная норма высева озимой пшеницы?</p>
+                        <p class="text-gray-600 mt-1">Ориентир 4,0–5,5 млн всхожих семян/га. Точное значение зависит от зоны, предшественника и сорта.</p>
                     </div>
-                    <div>
-                        <h3 class="font-bold text-gray-800 mb-2">Макрофакторы</h3>
-                        <ul class="list-disc list-inside text-sm text-gray-600 space-y-1">
-                            <li>Оценки урожая в Австралии и Аргентине</li>
-                            <li>Логистические тарифы на фрахт судов</li>
-                            <li>Курсовая разница национальных валют</li>
-                        </ul>
+                    <div class="p-3 rounded-lg bg-gray-50 border border-gray-100">
+                        <p class="font-semibold text-gray-800">Когда лучше проводить гербицидную обработку?</p>
+                        <p class="text-gray-600 mt-1">Базово — в фазе кущения, с учетом погодных условий и видового состава сорняков.</p>
+                    </div>
+                    <div class="p-3 rounded-lg bg-gray-50 border border-gray-100">
+                        <p class="font-semibold text-gray-800">Какой ROI дает комплексная защита?</p>
+                        <p class="text-gray-600 mt-1">По хозяйствам ROI обычно в диапазоне 700–1500%, в зависимости от культуры, сезона и цены реализации.</p>
                     </div>
                 </div>
             </div>
@@ -436,6 +582,7 @@
             <p class="text-gray-600 mb-8 max-w-4xl text-lg">Прикладные сервисы для расчетов на местах. Интерактивный калькулятор позволяет мгновенно рассчитать норму высева семян в килограммах на гектар, учитывая заданную густоту стояния, массу 1000 зерен и лабораторную всхожесть. Это исключает перерасход семенного материала.</p>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="space-y-6">
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                     <div class="flex items-center mb-6">
                         <div class="text-3xl mr-3">🧮</div>
@@ -467,6 +614,98 @@
                         <div class="text-3xl font-black text-green-700"><span id="result-value">198</span> <span class="text-lg font-normal">кг / га</span></div>
                         <p class="text-xs text-green-600 mt-2">Формула: (Густота × Масса 1000) / Годность</p>
                     </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                    <div class="flex items-center mb-6">
+                        <div class="text-3xl mr-3">💰</div>
+                        <h2 class="text-4xl font-bold tracking-tight">Калькулятор прибыли</h2>
+                    </div>
+                    <form id="profit-calc-form" class="grid grid-cols-1 md:grid-cols-2 gap-4" onsubmit="event.preventDefault(); calculateProfit();">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Площадь, га</label>
+                            <input type="number" id="profit-area" step="1" value="100" required class="w-full border border-gray-300 rounded-2xl p-3 text-2xl">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Урожайность, т/га</label>
+                            <input type="number" id="profit-yield" step="0.1" value="5.5" required class="w-full border border-gray-300 rounded-2xl p-3 text-2xl">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Цена, ₽/т</label>
+                            <input type="number" id="profit-price" step="100" value="24000" required class="w-full border border-gray-300 rounded-2xl p-3 text-2xl">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Затраты, ₽/га</label>
+                            <input type="number" id="profit-cost" step="100" value="42500" required class="w-full border border-gray-300 rounded-2xl p-3 text-2xl">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Субсидия, %</label>
+                            <input type="number" id="profit-subsidy" step="1" value="40" min="0" max="100" class="w-full md:w-1/2 border border-gray-300 rounded-2xl p-3 text-2xl">
+                        </div>
+                        <button type="submit" class="md:col-span-2 w-full md:w-auto bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-8 rounded-2xl transition text-xl">Рассчитать</button>
+                    </form>
+                    <div id="profit-result" class="mt-6 hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                            <div class="rounded-2xl bg-gray-50 p-4 border border-gray-100"><p class="text-gray-500">Выручка</p><p id="profit-revenue" class="text-4xl font-black text-emerald-800">—</p></div>
+                            <div class="rounded-2xl bg-gray-50 p-4 border border-gray-100"><p class="text-gray-500">Прибыль</p><p id="profit-net" class="text-4xl font-black text-gray-900">—</p></div>
+                            <div class="rounded-2xl bg-gray-50 p-4 border border-gray-100"><p class="text-gray-500">ROI</p><p id="profit-roi" class="text-4xl font-black text-emerald-800">—</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center mb-6">
+                        <div class="text-3xl mr-3">🧪</div>
+                        <h2 class="text-xl font-bold">Стоимость защиты (СЗР)</h2>
+                    </div>
+                    <p class="text-xs text-gray-600 mb-4">
+                        Технология АО «Щёлково Агрохим» ·
+                        <a href="https://betaren.ru/catalog/" target="_blank" rel="noopener noreferrer" class="text-green-700 hover:underline font-semibold">Каталог на betaren.ru ↗</a>
+                        · ⚠️ Цены справочные
+                    </p>
+                    <form id="protection-calc-form" class="grid grid-cols-1 md:grid-cols-2 gap-4" onsubmit="event.preventDefault(); calculateProtectionCost();">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Культура</label>
+                            <select id="protection-crop" class="w-full border border-gray-300 rounded-md p-2">
+                                <option value="wheat">Пшеница озимая</option>
+                                <option value="soy">Соя</option>
+                                <option value="sunflower">Подсолнечник</option>
+                                <option value="corn">Кукуруза</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Площадь, га</label>
+                            <input type="number" id="protection-area" step="1" value="100" required class="w-full border border-gray-300 rounded-md p-2">
+                        </div>
+                        <button type="submit" class="md:col-span-2 w-full bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-4 rounded-md transition">Рассчитать стоимость</button>
+                    </form>
+                    <div id="protection-result" class="mt-6 bg-cyan-50 p-4 rounded-lg border border-cyan-200 hidden">
+                        <p class="text-sm text-gray-600">Оценка затрат на программу защиты:</p>
+                        <p class="text-2xl font-black text-cyan-900 mt-1"><span id="protection-total">—</span> ₽</p>
+                        <p class="text-sm text-gray-700 mt-1">На 1 га: <span id="protection-per-ha" class="font-bold">—</span> ₽</p>
+                        <p class="text-xs text-gray-500 mt-2">Справочно, по усреднённой схеме препаратов. Для КП используйте форму выше.</p>
+                        <button type="button" onclick="goToLeadForm()" class="mt-4 bg-green-700 hover:bg-green-800 text-white font-bold py-2.5 px-4 rounded-md transition">
+                            Получить более детальное КП
+                        </button>
+                    </div>
+                    <div class="mt-6 overflow-x-auto">
+                        <table class="min-w-full text-xs border border-gray-200 rounded-lg">
+                            <thead class="bg-gray-50 text-gray-700">
+                                <tr>
+                                    <th class="px-3 py-2 text-left border-b">№</th>
+                                    <th class="px-3 py-2 text-left border-b">Препарат</th>
+                                    <th class="px-3 py-2 text-left border-b">Норма</th>
+                                    <th class="px-3 py-2 text-left border-b">Фаза</th>
+                                    <th class="px-3 py-2 text-right border-b">Цена/л, ₽</th>
+                                    <th class="px-3 py-2 text-right border-b">Стоимость/га, ₽</th>
+                                </tr>
+                            </thead>
+                            <tbody id="protection-table-body" class="text-gray-700">
+                                <tr><td colspan="6" class="px-3 py-3 text-center text-gray-500">Выберите культуру и нажмите «Рассчитать стоимость»</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 </div>
 
                 <div class="space-y-6">
@@ -588,6 +827,97 @@
                 resBox.classList.add('bg-green-100');
                 setTimeout(() => resBox.classList.remove('bg-green-100'), 300);
             }
+        }
+
+        function formatRub(value) {
+            return new Intl.NumberFormat('ru-RU').format(Math.round(value));
+        }
+
+        function formatRubShort(value) {
+            const abs = Math.abs(value);
+            if (abs >= 1000000) {
+                return `${(value / 1000000).toFixed(1)} млн ₽`;
+            }
+            return `${formatRub(value)} ₽`;
+        }
+
+        function calculateProfit() {
+            const area = parseFloat(document.getElementById('profit-area')?.value || '0');
+            const yieldPerHa = parseFloat(document.getElementById('profit-yield')?.value || '0');
+            const pricePerTon = parseFloat(document.getElementById('profit-price')?.value || '0');
+            const costPerHa = parseFloat(document.getElementById('profit-cost')?.value || '0');
+            const subsidyPct = parseFloat(document.getElementById('profit-subsidy')?.value || '0');
+
+            if (!(area > 0 && yieldPerHa > 0 && pricePerTon > 0 && costPerHa >= 0 && subsidyPct >= 0)) return;
+
+            const grossRevenue = area * yieldPerHa * pricePerTon;
+            const grossCost = area * costPerHa;
+            const subsidy = grossCost * (subsidyPct / 100);
+            const netCost = grossCost - subsidy;
+            const profit = grossRevenue - netCost;
+            const roi = netCost > 0 ? (profit / netCost) * 100 : 0;
+
+            document.getElementById('profit-revenue').textContent = formatRubShort(grossRevenue);
+            document.getElementById('profit-net').textContent = formatRubShort(profit);
+            document.getElementById('profit-roi').textContent = `${Math.round(roi)}%`;
+            document.getElementById('profit-result')?.classList.remove('hidden');
+        }
+
+        function calculateProtectionCost() {
+            const area = parseFloat(document.getElementById('protection-area')?.value || '0');
+            const crop = document.getElementById('protection-crop')?.value || 'wheat';
+            if (!(area > 0)) return;
+
+            const protectionPrograms = {
+                wheat: [
+                    { name: 'Пиксель, МД', norm: '0.3 л/га', phase: 'ВВСН 27–29', price: 6900 },
+                    { name: 'Азофок', norm: '2.0 л/га', phase: 'ВВСН 27–29', price: 850 },
+                    { name: 'Азорро, КС', norm: '1.0 л/га', phase: 'ВВСН 25', price: 1450 },
+                    { name: 'Триада, ККР', norm: '0.6 л/га', phase: 'ВВСН 39', price: 2600 },
+                    { name: 'Фаскорд, КЭ', norm: '0.15 л/га', phase: 'ВВСН 31/39', price: 1600 }
+                ],
+                soy: [
+                    { name: 'Гермес, МД', norm: '1.0 л/га', phase: '2–4 листа', price: 1800 },
+                    { name: 'Фаскорд, КЭ', norm: '0.15 л/га', phase: 'вегетация', price: 1600 },
+                    { name: 'Триада, ККР', norm: '0.5 л/га', phase: 'бутонизация', price: 2600 },
+                    { name: 'Ультрамаг Комби', norm: '1.5 л/га', phase: 'вегетация', price: 600 }
+                ],
+                sunflower: [
+                    { name: 'Гермес, МД', norm: '1.2 л/га', phase: '2–6 листьев', price: 1800 },
+                    { name: 'Эсперо, КС', norm: '0.15 л/га', phase: 'вегетация', price: 1900 },
+                    { name: 'Триада, ККР', norm: '0.5 л/га', phase: 'вегетация', price: 2600 },
+                    { name: 'Ультрамаг Сера 900', norm: '1.0 л/га', phase: 'вегетация', price: 700 }
+                ],
+                corn: [
+                    { name: 'Арго Прим, МЭ', norm: '0.5 л/га', phase: '3–5 листьев', price: 1450 },
+                    { name: 'Фаскорд, КЭ', norm: '0.15 л/га', phase: 'вегетация', price: 1600 },
+                    { name: 'Эсперо, КС', norm: '0.15 л/га', phase: 'вегетация', price: 1900 },
+                    { name: 'Ультрамаг Комби', norm: '1.5 л/га', phase: 'вегетация', price: 600 }
+                ]
+            };
+            const rows = protectionPrograms[crop] || protectionPrograms.wheat;
+            const tableBody = document.getElementById('protection-table-body');
+            let perHa = 0;
+            tableBody.innerHTML = rows.map((row, idx) => {
+                const normVal = parseFloat(String(row.norm).replace(',', '.'));
+                const costPerHa = (isNaN(normVal) ? 0 : normVal) * row.price;
+                perHa += costPerHa;
+                return `
+                    <tr class="border-b border-gray-100">
+                        <td class="px-3 py-2">${idx + 1}</td>
+                        <td class="px-3 py-2">${row.name}</td>
+                        <td class="px-3 py-2">${row.norm}</td>
+                        <td class="px-3 py-2">${row.phase}</td>
+                        <td class="px-3 py-2 text-right">${formatRub(row.price)}</td>
+                        <td class="px-3 py-2 text-right">${formatRub(costPerHa)}</td>
+                    </tr>
+                `;
+            }).join('');
+            const total = perHa * area;
+
+            document.getElementById('protection-total').textContent = formatRub(total);
+            document.getElementById('protection-per-ha').textContent = formatRub(perHa);
+            document.getElementById('protection-result')?.classList.remove('hidden');
         }
 
         function initCharts() {
@@ -742,6 +1072,20 @@
         function goToLeadForm() {
             navigate('home');
             document.getElementById('lead-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function goToTools() {
+            navigate('home');
+            document.getElementById('home-tools')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        const toolsSection = document.getElementById('view-tools');
+        const homeToolsAnchor = document.getElementById('home-tools-anchor');
+        if (toolsSection && homeToolsAnchor) {
+            toolsSection.id = 'home-tools';
+            toolsSection.classList.remove('view-section');
+            toolsSection.classList.add('active');
+            homeToolsAnchor.appendChild(toolsSection);
         }
 
         document.getElementById('lead-form')?.addEventListener('submit', submitLead);
