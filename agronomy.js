@@ -16,7 +16,7 @@
       cardTitle: "Подготовка и сев",
       meta: { season: "Осень", period: "Август — октябрь", bbch: "до 13", nitrogen: null },
       description:
-        "По технологической карте из файла «Озимые_ИИ1.xlsx»: базовое питание перед посевом и протравка/биостимуляция семян.",
+        "Базовое питание перед посевом и протравка/биостимуляция семян.",
       blocks: [
         {
           type: "nutrition",
@@ -87,14 +87,14 @@
           ],
         },
         {
-          type: "herbicide",
-          heading: "Гербицидная защита",
+          type: "nutrition",
+          heading: "Листовая подкормка",
           items: [
             {
               name: "Азафок",
               norm: "2,0 л/га",
               when: "Осенью в фазе ВВСН 13–14 (в составе обработки №2).",
-              text: "Контроль сорняков в осенний период.",
+              text: "Жидкое микробиологическое удобрение для улучшения питания растений азотом, фосфором и калием.",
               href: "https://betaren.ru/catalog/spetsialnye-udobreniya/mikrobiologicheskie-preparaty/azafok/",
             },
           ],
@@ -107,7 +107,7 @@
               name: "Ультрамаг Молибден",
               norm: "0,9 л/га",
               when: "Осенью в фазе ВВСН 13–14 (совместно с обработкой №2).",
-              text: "Поддержка обменных процессов в осеннюю вегетацию.",
+              text: "Поддержка обменных процессов в осеннюю вегетацию. Поддержка процесса азотфиксации.",
               href: "https://betaren.ru/catalog/spetsialnye-udobreniya/mikroudobreniya/ultramag_molibden/",
             },
           ],
@@ -154,7 +154,7 @@
         },
         {
           type: "nutrition",
-          heading: "Питание и антистресс",
+          heading: "Антистресс",
           items: [
             {
               name: "Ультрамаг Фосфор Супер",
@@ -192,13 +192,6 @@
               text: "Системный контроль двудольных сорняков.",
               href: "https://betaren.ru/catalog/sredstva-zashchity-rasteniy/gerbitsidy/pixel_md/",
             },
-            {
-              name: "Азофок",
-              norm: "2,0 л/га",
-              when: "Весной в фазе ВВСН 27–29 (в составе обработки №5).",
-              text: "Дополнительный контроль сорной растительности.",
-              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/mikrobiologicheskie-preparaty/azafok/",
-            },
           ],
         },
         {
@@ -211,6 +204,13 @@
               when: "Весной в фазе ВВСН 27–29 (листовая подкормка в обработке №5).",
               text: "Микроэлементы в баковой смеси с гербицидной обработкой.",
               href: "https://betaren.ru/catalog/spetsialnye-udobreniya/mikroudobreniya/ultramag_combi_zernovie/",
+            },
+            {
+              name: "Азафок",
+              norm: "2,0 л/га",
+              when: "Весной в фазе ВВСН 27–29 (в составе листовой подкормки обработки №5).",
+              text: "Жидкое микробиологическое удобрение для улучшения питания растений азотом, фосфором и калием.",
+              href: "https://betaren.ru/catalog/spetsialnye-udobreniya/mikrobiologicheskie-preparaty/azafok/",
             },
           ],
         },
@@ -252,6 +252,12 @@
               text: "Поддержка активного роста в трубковании.",
               href: "https://betaren.ru/catalog/spetsialnye-udobreniya/aminokislotnye-biostimulyatory/biostim_zernovoy/",
             },
+          ],
+        },
+        {
+          type: "herbicide",
+          heading: "Гербицидная защита",
+          items: [
             {
               name: "Арго Прим",
               norm: "0,5 л/га",
@@ -298,20 +304,20 @@
         },
         {
           type: "nutrition",
-          heading: "Биостимуляция",
+          heading: "Антистресс",
           items: [
             {
               name: "Биостим универсал",
               norm: "0,5 л/га",
               when: "Весной в фазе ВВСН 39 (в составе обработки №7).",
-              text: "Поддержка продуктивности в период формирования урожая.",
+              text: "Поддержка продуктивности в период формирования урожая. Защита от высоких температур.",
               href: "https://betaren.ru/catalog/spetsialnye-udobreniya/aminokislotnye-biostimulyatory/biostim_universal/",
             },
             {
               name: "Гумат калия Суфлер",
               norm: "0,5 л/га",
               when: "Весной в фазе ВВСН 39 (в составе обработки №7).",
-              text: "Антистрессовая поддержка культуры.",
+              text: "Антистрессовая поддержка культуры. Защита от высоких температур.",
               href: "https://betaren.ru/catalog/spetsialnye-udobreniya/organomineralnoe-udobrenie/gumat_kaliya_sufler/",
             },
           ],
@@ -396,7 +402,7 @@
       cardTitle: "Налив зерна",
       meta: { season: "Лето", period: "Июнь — июль", bbch: "70–89", nitrogen: null },
       description:
-        "В карте «Озимые_ИИ1.xlsx» отдельная плановая обработка на этой стадии не выделена. Этап ведётся как мониторинг состояния посева и оценка необходимости внеплановых обработок по ЭПВ.",
+        "Отдельная плановая обработка на этой стадии не выделена. Этап ведётся как мониторинг состояния посева и оценка необходимости внеплановых обработок по ЭПВ.",
       blocks: [
         {
           type: "insecticide",

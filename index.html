@@ -61,6 +61,19 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        @media (max-width: 767px) {
+            .view-section {
+                display: block !important;
+                animation: none;
+                scroll-margin-top: 72px;
+            }
+            .view-section + .view-section {
+                border-top: 2px solid #e5e7eb;
+                padding-top: 2rem;
+                margin-top: 2.5rem;
+            }
+        }
+
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
@@ -104,6 +117,63 @@
         button:not(.nav-btn):hover {
             transform: translateY(-1px);
             filter: saturate(1.05);
+        }
+
+        .ai-chip {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #15803d;
+            border-radius: 999px;
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+            white-space: nowrap;
+        }
+        .ai-chip:hover {
+            background: #dcfce7;
+            border-color: #86efac;
+            transform: none;
+            filter: none;
+        }
+        .ai-msg-user {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .ai-msg-user > div {
+            background: #15803d;
+            color: #fff;
+            border-radius: 1rem;
+            border-bottom-right-radius: 4px;
+            padding: 8px 12px;
+            font-size: 0.875rem;
+            max-width: 85%;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+        .ai-msg-bot {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+        .ai-msg-bot > div {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 1rem;
+            border-top-left-radius: 4px;
+            padding: 8px 12px;
+            font-size: 0.875rem;
+            color: #1f2937;
+            max-width: 85%;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            line-height: 1.5;
+        }
+        #ai-chat-panel {
+            display: none;
+        }
+        #ai-chat-panel.open {
+            display: flex;
+            flex-direction: column;
         }
     </style>
 </head>
@@ -162,7 +232,6 @@
 
         <section id="view-home" class="view-section active">
             <div class="bg-gradient-to-r from-green-900 via-green-800 to-emerald-700 rounded-3xl p-8 mb-8 text-white shadow-2xl relative overflow-hidden border border-green-700">
-                <div class="absolute -right-10 -top-10 text-9xl opacity-10">🌾</div>
                 <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
                     <img src="images/shchelkovo-logo.png" alt="Щелково Агрохим" class="h-12 sm:h-14 w-auto max-w-[min(100%,220px)] object-contain object-left bg-white/95 rounded-lg px-3 py-2 shadow-sm" width="200" height="61" loading="eager">
                     <div class="inline-flex flex-col gap-1.5">
@@ -175,7 +244,7 @@
                 <h1 class="text-3xl md:text-5xl font-bold mb-4">От семени до бункера: работаем на ваш урожай</h1>
                 <p class="text-green-100 text-lg md:text-xl max-w-2xl mb-2">Работаем с портфелем сортов селекции «Щелково Агрохим» и формируем комплексное B2B-решение: семена, технология выращивания и агрохимическое сопровождение.</p>
                 <p class="text-green-100 text-sm mb-6"></p>
-                <button onclick="navigate('catalog')" class="bg-yellow-500 hover:bg-yellow-400 text-green-900 font-bold py-3 px-6 rounded-lg transition shadow-md">
+                <button onclick="isMobile() ? goToLeadForm() : navigate('catalog')" class="bg-yellow-500 hover:bg-yellow-400 text-green-900 font-bold py-3 px-6 rounded-lg transition shadow-md">
                     Подобрать комплексное решение
                 </button>
             </div>
@@ -203,9 +272,22 @@
                     <div>
                         <p class="text-sm text-gray-500 font-medium">Целевой результат</p>
                         <p class="text-2xl font-bold text-gray-800">140,2 ц/га</p>
-                        <a href="https://betaren.ru/news/ermolovka-i-sistema-dlya-maksimalnoy-produktivnosti-teyri-dlya-vysokogo-belka/" target="_blank" rel="noopener noreferrer" class="mt-1 inline-block text-xs font-semibold text-green-700 hover:underline">Книга рекордов России, 2025 г. →</a>
+                        <a href="https://betaren.ru/news/ozimaya-pshenitsa-shchyelkovo-agrokhim-pobila-mirovoy-rekord/" target="_blank" rel="noopener noreferrer" class="mt-1 inline-block text-xs font-semibold text-green-700 hover:underline">Книга рекордов России, 2025 г. →</a>
                     </div>
                 </div>
+            </div>
+
+            <!-- Прогноз погоды: Орёл -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-gray-800">🌤️ Погода в Орле — прогноз на 5 дней</h2>
+                    <span id="weather-updated" class="text-xs text-gray-400"></span>
+                </div>
+                <div id="weather-grid" class="grid grid-cols-5 gap-3">
+                    <!-- заполняется JS -->
+                    <div class="col-span-5 text-center text-gray-400 py-6 text-sm" id="weather-loading">Загрузка прогноза…</div>
+                </div>
+                <div id="weather-error" class="hidden text-center text-red-500 text-sm py-4">Не удалось загрузить данные о погоде.</div>
             </div>
 
             <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
@@ -214,14 +296,20 @@
                 <form id="lead-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <input id="lead-company" required class="border rounded-md p-2" placeholder="Компания / хозяйство">
                     <input id="lead-name" required class="border rounded-md p-2" placeholder="Контактное лицо">
-                    <input id="lead-phone" required class="border rounded-md p-2" placeholder="Телефон">
-                    <select id="lead-variety" class="border rounded-md p-2"></select>
+                    <input id="lead-phone" required type="tel" class="border rounded-md p-2" placeholder="+7 (___) ___-__-__" maxlength="18" autocomplete="tel">
                     <select id="lead-package" class="border rounded-md p-2">
                         <option value="Семена">Только семена</option>
                         <option value="Семена + технология" selected>Семена + технология выращивания</option>
                         <option value="Семена + технология + агрохимия">Семена + технология + агрохимия</option>
                     </select>
-                    <input id="lead-volume" type="number" required class="border rounded-md p-2 md:col-span-2" placeholder="Объем закупки, т">
+                    <div class="md:col-span-2">
+                        <p class="text-sm font-medium text-gray-700 mb-2">Интересующие сорта <span class="text-gray-400 font-normal">(можно выбрать несколько)</span></p>
+                        <div id="lead-variety-group" class="grid grid-cols-2 sm:grid-cols-3 gap-2"></div>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Площадь посева, га</label>
+                        <input id="lead-volume" type="number" required min="1" class="border rounded-md p-2 w-full" placeholder="Например: 500">
+                    </div>
                     <button type="submit" class="bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-4 rounded-md transition md:col-span-2">Отправить заявку</button>
                 </form>
                 <div id="lead-result" class="hidden mt-4 p-3 rounded bg-green-50 border border-green-200 text-sm text-green-800"></div>
@@ -353,19 +441,19 @@
 
             <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-8">
                 <div class="w-full md:w-1/3">
-                    <h2 class="text-xl font-bold mb-4">Топ-сорта селекции «Щелково Агрохим»</h2>
+                    <h2 class="text-xl font-bold mb-2">Топ-сорта селекции «Щелково Агрохим»</h2>
                     <ul class="space-y-3">
                         <li class="p-3 bg-green-50 rounded border-l-4 border-green-600">
                             <h3 class="font-bold text-gray-800">Ермоловка</h3>
                             <p class="text-xs text-gray-600 mt-1">Рекордный потенциал урожайности. Отличная зимостойкость и устойчивость к полеганию.</p>
                         </li>
                         <li class="p-3 bg-gray-50 rounded border-l-4 border-gray-400 hover:bg-green-50 transition cursor-pointer">
-                            <h3 class="font-bold text-gray-800">Володя</h3>
-                            <p class="text-xs text-gray-600 mt-1">Высокое качество зерна. Устойчив к основным листовым инфекциям и осыпанию.</p>
+                            <h3 class="font-bold text-gray-800">Система</h3>
+                            <p class="text-xs text-gray-600 mt-1">Высокоинтенсивный сорт для технологичного возделывания.</p>
                         </li>
                         <li class="p-3 bg-gray-50 rounded border-l-4 border-gray-400 hover:bg-green-50 transition cursor-pointer">
-                            <h3 class="font-bold text-gray-800">ДФ 2020</h3>
-                            <p class="text-xs text-gray-600 mt-1">Инновационный сорт с высочайшей морозостойкостью и засухоустойчивостью.</p>
+                            <h3 class="font-bold text-gray-800">Изумруд Дубовицкого</h3>
+                            <p class="text-xs text-gray-600 mt-1">Адаптивный сорт с элементами интенсификации. Занимает свыше 150 тыс. га.</p>
                         </li>
                     </ul>
                     <a href="https://betaren.ru/" target="_blank" class="block text-center mt-4 w-full border border-green-600 text-green-700 py-2 rounded font-medium hover:bg-green-50 transition">
@@ -377,7 +465,7 @@
                     <div class="chart-container">
                         <canvas id="yieldChart"></canvas>
                     </div>
-                    <p class="text-xs text-center text-gray-500 mt-4">* Данные по максимальным показателям взяты из документов по сортам и материалов селекции.</p>
+                    <p class="text-xs text-center text-gray-500 mt-4">* Данные по максимальным показателям взяты из материалов отдела селекции <strong>ССЦ Щёлково Агрохим</strong> (Селекционно-семеноводческий центр)</p>
                 </div>
             </div>
 
@@ -385,68 +473,96 @@
                 <div>
                     <h2 class="text-xl font-bold text-gray-800 mb-4">Преимущества сортов</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <article class="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
-                            <h3 class="font-bold text-green-800">Ермоловка</h3>
-                            <ul class="mt-2 list-disc list-inside text-sm text-gray-600 space-y-1">
+                        <article class="rounded-xl border border-gray-100 bg-white p-5 shadow-sm flex flex-col">
+                            <h3 class="font-bold text-green-800 cursor-pointer hover:text-green-600 transition" onclick="openVarietyModal('Ермоловка')">Ермоловка</h3>
+                            <ul class="mt-2 list-disc list-inside text-sm text-gray-600 space-y-1 flex-1">
                                 <li>Рекордный потенциал урожайности в селекционных испытаниях.</li>
                                 <li>Высокая отзывчивость на интенсификацию и азотное питание.</li>
                                 <li>Устойчивость к желтой, бурой и стеблевой ржавчине.</li>
                                 <li>Высокие хлебопекарные показатели: белок и клейковина.</li>
                             </ul>
+                            <div class="mt-4 flex gap-2">
+                                <button class="flex-1 border border-green-700 text-green-700 hover:bg-green-50 text-sm font-semibold py-2 px-3 rounded transition" onclick="openVarietyModal('Ермоловка')">Узнать подробнее</button>
+                                <button class="flex-1 bg-green-700 hover:bg-green-800 text-white text-sm font-semibold py-2 px-3 rounded transition" onclick="orderVariety('Ермоловка'); navigate('home');">Получить КП</button>
+                            </div>
                         </article>
-                        <article class="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
-                            <h3 class="font-bold text-green-800">Сократ</h3>
-                            <ul class="mt-2 list-disc list-inside text-sm text-gray-600 space-y-1">
+                        <article class="rounded-xl border border-gray-100 bg-white p-5 shadow-sm flex flex-col">
+                            <h3 class="font-bold text-green-800 cursor-pointer hover:text-green-600 transition" onclick="openVarietyModal('Сократ')">Сократ</h3>
+                            <ul class="mt-2 list-disc list-inside text-sm text-gray-600 space-y-1 flex-1">
                                 <li>Очень высокий потенциал урожайности среди линейки.</li>
                                 <li>Крупный колос, высокая озернённость и масса зерна с колоса.</li>
                                 <li>Повышенная регенерация весной — запас прочности посева.</li>
                                 <li>Толерантность к бурой ржавчине без резкого падения продуктивности.</li>
                             </ul>
+                            <div class="mt-4 flex gap-2">
+                                <button class="flex-1 border border-green-700 text-green-700 hover:bg-green-50 text-sm font-semibold py-2 px-3 rounded transition" onclick="openVarietyModal('Сократ')">Узнать подробнее</button>
+                                <button class="flex-1 bg-green-700 hover:bg-green-800 text-white text-sm font-semibold py-2 px-3 rounded transition" onclick="orderVariety('Сократ'); navigate('home');">Получить КП</button>
+                            </div>
                         </article>
-                        <article class="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
-                            <h3 class="font-bold text-green-800">Интеза</h3>
-                            <ul class="mt-2 list-disc list-inside text-sm text-gray-600 space-y-1">
+                        <article class="rounded-xl border border-gray-100 bg-white p-5 shadow-sm flex flex-col">
+                            <h3 class="font-bold text-green-800 cursor-pointer hover:text-green-600 transition" onclick="openVarietyModal('Интеза')">Интеза</h3>
+                            <ul class="mt-2 list-disc list-inside text-sm text-gray-600 space-y-1 flex-1">
                                 <li>Стабильно высокая продуктивность и «ценная» пшеница по качеству.</li>
                                 <li>Сочетание урожайности с повышенным содержанием белка.</li>
                                 <li>Высокая устойчивость к бурой ржавчине.</li>
                                 <li>Сильные адаптивные свойства: зимостойкость и засухоустойчивость.</li>
                             </ul>
+                            <div class="mt-4 flex gap-2">
+                                <button class="flex-1 border border-green-700 text-green-700 hover:bg-green-50 text-sm font-semibold py-2 px-3 rounded transition" onclick="openVarietyModal('Интеза')">Узнать подробнее</button>
+                                <button class="flex-1 bg-green-700 hover:bg-green-800 text-white text-sm font-semibold py-2 px-3 rounded transition" onclick="orderVariety('Интеза'); navigate('home');">Получить КП</button>
+                            </div>
                         </article>
-                        <article class="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
-                            <h3 class="font-bold text-green-800">Система</h3>
-                            <ul class="mt-2 list-disc list-inside text-sm text-gray-600 space-y-1">
+                        <article class="rounded-xl border border-gray-100 bg-white p-5 shadow-sm flex flex-col">
+                            <h3 class="font-bold text-green-800 cursor-pointer hover:text-green-600 transition" onclick="openVarietyModal('Система')">Система</h3>
+                            <ul class="mt-2 list-disc list-inside text-sm text-gray-600 space-y-1 flex-1">
                                 <li>Высокоинтенсивный сорт для технологичного возделывания.</li>
                                 <li>Устойчивость к стеблевой и желтой ржавчине, хорошая работа по вирусам.</li>
                                 <li>Подтверждённая продуктивность в производстве и международных сравнениях.</li>
                                 <li>Ценные хлебопекарные качества, потенциал белка свыше 16% в опытах.</li>
                             </ul>
+                            <div class="mt-4 flex gap-2">
+                                <button class="flex-1 border border-green-700 text-green-700 hover:bg-green-50 text-sm font-semibold py-2 px-3 rounded transition" onclick="openVarietyModal('Система')">Узнать подробнее</button>
+                                <button class="flex-1 bg-green-700 hover:bg-green-800 text-white text-sm font-semibold py-2 px-3 rounded transition" onclick="orderVariety('Система'); navigate('home');">Получить КП</button>
+                            </div>
                         </article>
-                        <article class="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
-                            <h3 class="font-bold text-green-800">ДФ 2020</h3>
-                            <ul class="mt-2 list-disc list-inside text-sm text-gray-600 space-y-1">
+                        <article class="rounded-xl border border-gray-100 bg-white p-5 shadow-sm flex flex-col">
+                            <h3 class="font-bold text-green-800 cursor-pointer hover:text-green-600 transition" onclick="openVarietyModal('ДФ 2020')">ДФ 2020</h3>
+                            <ul class="mt-2 list-disc list-inside text-sm text-gray-600 space-y-1 flex-1">
                                 <li>Повышенная устойчивость к зимним и засушливым стрессам.</li>
                                 <li>Высокий потенциал урожайности и качественное зерно.</li>
                                 <li>Устойчивость к пыльной и твёрдой головне, септориозу.</li>
                                 <li>Стабильная реализация продуктивности в разных зонах.</li>
                             </ul>
+                            <div class="mt-4 flex gap-2">
+                                <button class="flex-1 border border-green-700 text-green-700 hover:bg-green-50 text-sm font-semibold py-2 px-3 rounded transition" onclick="openVarietyModal('ДФ 2020')">Узнать подробнее</button>
+                                <button class="flex-1 bg-green-700 hover:bg-green-800 text-white text-sm font-semibold py-2 px-3 rounded transition" onclick="orderVariety('ДФ 2020'); navigate('home');">Получить КП</button>
+                            </div>
                         </article>
-                        <article class="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
-                            <h3 class="font-bold text-green-800">Володя</h3>
-                            <ul class="mt-2 list-disc list-inside text-sm text-gray-600 space-y-1">
+                        <article class="rounded-xl border border-gray-100 bg-white p-5 shadow-sm flex flex-col">
+                            <h3 class="font-bold text-green-800 cursor-pointer hover:text-green-600 transition" onclick="openVarietyModal('Воло́дя')">Воло́дя</h3>
+                            <ul class="mt-2 list-disc list-inside text-sm text-gray-600 space-y-1 flex-1">
                                 <li>Стабильно высокая продуктивность и качество зерна.</li>
                                 <li>Высокоустойчив к бурой ржавчине, умеренно — к мучнистой росе и септориозу.</li>
                                 <li>Низкорослый интенсивный тип: устойчивость к полеганию и осыпанию.</li>
                                 <li>Сильные мукомольные и хлебопекарные показатели.</li>
                             </ul>
+                            <div class="mt-4 flex gap-2">
+                                <button class="flex-1 border border-green-700 text-green-700 hover:bg-green-50 text-sm font-semibold py-2 px-3 rounded transition" onclick="openVarietyModal('Воло́дя')">Узнать подробнее</button>
+                                <button class="flex-1 bg-green-700 hover:bg-green-800 text-white text-sm font-semibold py-2 px-3 rounded transition" onclick="orderVariety('Воло́дя'); navigate('home');">Получить КП</button>
+                            </div>
                         </article>
-                        <article class="rounded-xl border border-gray-100 bg-white p-5 shadow-sm md:col-span-2">
-                            <h3 class="font-bold text-green-800">Изумруд Дубовицкого</h3>
-                            <ul class="mt-2 list-disc list-inside text-sm text-gray-600 space-y-1">
+                        <article class="rounded-xl border border-gray-100 bg-white p-5 shadow-sm md:col-span-2 flex flex-col">
+                            <h3 class="font-bold text-green-800 cursor-pointer hover:text-green-600 transition" onclick="openVarietyModal('Изумруд Дубовицкого')">Изумруд Дубовицкого</h3>
+                            <ul class="mt-2 list-disc list-inside text-sm text-gray-600 space-y-1 flex-1">
                                 <li>Выдающаяся засухо- и жаростойкость для степных и засушливых зон.</li>
                                 <li>Высокая озернённость колоса и стабильная продуктивность в испытаниях.</li>
                                 <li>Генетика с акцентом на устойчивость к прорастанию на корню — сохранение качества зерна.</li>
                                 <li>Широкий ареал допуска: Центрально-Черноземный, Средневолжский и Уральский регионы.</li>
                             </ul>
+                            <div class="mt-4 flex gap-2 md:max-w-sm">
+                                <button class="flex-1 border border-green-700 text-green-700 hover:bg-green-50 text-sm font-semibold py-2 px-3 rounded transition" onclick="openVarietyModal('Изумруд Дубовицкого')">Узнать подробнее</button>
+                                <button class="flex-1 bg-green-700 hover:bg-green-800 text-white text-sm font-semibold py-2 px-3 rounded transition" onclick="orderVariety('Изумруд Дубовицкого'); navigate('home');">Получить КП</button>
+                            </div>
                         </article>
                     </div>
                 </div>
@@ -580,17 +696,27 @@
 
         <section id="view-tools" class="view-section">
             <h1 class="text-3xl font-bold text-gray-800 mb-2">Цифровые Инструменты</h1>
-            <p class="text-gray-600 mb-8 max-w-4xl text-lg">Прикладные сервисы для расчетов на местах. Интерактивный калькулятор позволяет мгновенно рассчитать норму высева семян в килограммах на гектар, учитывая заданную густоту стояния, массу 1000 зерен и лабораторную всхожесть. Это исключает перерасход семенного материала.</p>
+            <p class="text-gray-600 mb-8 max-w-4xl text-lg">Прикладные сервисы для расчётов на местах: норма высева, оценка прибыли и стоимость программы защиты.</p>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="space-y-6">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <div class="flex items-center mb-6">
+            <!-- AI-Ассистент Агронома — плашка -->
+            <div class="bg-gradient-to-r from-gray-800 to-gray-700 p-6 rounded-xl shadow-sm text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                <div>
+                    <h2 class="text-lg font-bold flex items-center gap-2 mb-2"><span>🤖</span> AI-Ассистент Агронома</h2>
+                    <p class="text-sm text-gray-300 max-w-lg">Загрузите фото поля или опишите симптомы заболевания для автоматического распознавания (Бета-версия).</p>
+                </div>
+                <button onclick="toggleAiChat()" class="bg-white text-gray-800 px-5 py-2.5 rounded-lg font-bold text-sm hover:bg-gray-100 transition whitespace-nowrap shrink-0">Попробовать</button>
+            </div>
+
+            <!-- Строка 1: два калькулятора рядом -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+
+                <!-- Калькулятор нормы высева -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
+                    <div class="flex items-center mb-5">
                         <div class="text-3xl mr-3">🧮</div>
                         <h2 class="text-xl font-bold">Калькулятор нормы высева</h2>
                     </div>
-
-                    <form id="seed-calc-form" class="space-y-4" onsubmit="event.preventDefault(); calculateSeeding();">
+                    <form id="seed-calc-form" class="space-y-4 flex-1" onsubmit="event.preventDefault(); calculateSeeding();">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Планируемая густота (млн шт./га)</label>
                             <input type="number" id="calc-density" step="0.1" value="4.5" required class="w-full border border-gray-300 rounded-md p-2 focus:ring-green-500 focus:border-green-500">
@@ -605,91 +731,94 @@
                             <input type="number" id="calc-germination" step="0.1" value="95.0" required class="w-full border border-gray-300 rounded-md p-2 focus:ring-green-500 focus:border-green-500">
                             <p class="text-xs text-gray-500 mt-1">Всхожесть × Чистота / 100</p>
                         </div>
-                        <button type="submit" class="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-4 rounded-md transition mt-4">
-                            Рассчитать
-                        </button>
+                        <button type="submit" class="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-4 rounded-md transition">Рассчитать</button>
                     </form>
-
-                    <div id="calc-result" class="mt-6 bg-green-50 p-4 rounded-lg border border-green-200 hidden">
+                    <div id="calc-result" class="mt-5 bg-green-50 p-4 rounded-lg border border-green-200 hidden">
                         <h3 class="text-sm font-bold text-green-800 mb-1">Рекомендуемая весовая норма высева:</h3>
                         <div class="text-3xl font-black text-green-700"><span id="result-value">198</span> <span class="text-lg font-normal">кг / га</span></div>
                         <p class="text-xs text-green-600 mt-2">Формула: (Густота × Масса 1000) / Годность</p>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-                    <div class="flex items-center mb-6">
+                <!-- Калькулятор прибыли -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
+                    <div class="flex items-center mb-5">
                         <div class="text-3xl mr-3">💰</div>
                         <h2 class="text-xl font-bold">Калькулятор прибыли</h2>
                     </div>
-                    <form id="profit-calc-form" class="grid grid-cols-1 md:grid-cols-2 gap-4" onsubmit="event.preventDefault(); calculateProfit();">
+                    <form id="profit-calc-form" class="grid grid-cols-2 gap-4 flex-1" onsubmit="event.preventDefault(); calculateProfit();">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Площадь, га</label>
-                            <input type="number" id="profit-area" step="1" value="100" required class="w-full border border-gray-300 rounded-2xl p-3 text-2xl">
+                            <input type="number" id="profit-area" step="1" value="100" required class="w-full border border-gray-300 rounded-md p-2 focus:ring-green-500 focus:border-green-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Урожайность, т/га</label>
-                            <input type="number" id="profit-yield" step="0.1" value="5.5" required class="w-full border border-gray-300 rounded-2xl p-3 text-2xl">
+                            <input type="number" id="profit-yield" step="0.1" value="5.5" required class="w-full border border-gray-300 rounded-md p-2 focus:ring-green-500 focus:border-green-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Цена, ₽/т</label>
-                            <input type="number" id="profit-price" step="100" value="24000" required class="w-full border border-gray-300 rounded-2xl p-3 text-2xl">
+                            <input type="number" id="profit-price" step="100" value="24000" required class="w-full border border-gray-300 rounded-md p-2 focus:ring-green-500 focus:border-green-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Затраты, ₽/га</label>
-                            <input type="number" id="profit-cost" step="100" value="42500" required class="w-full border border-gray-300 rounded-2xl p-3 text-2xl">
+                            <input type="number" id="profit-cost" step="100" value="42500" required class="w-full border border-gray-300 rounded-md p-2 focus:ring-green-500 focus:border-green-500">
                         </div>
-                        <div class="md:col-span-2">
+                        <div class="col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Субсидия, %</label>
-                            <input type="number" id="profit-subsidy" step="1" value="40" min="0" max="100" class="w-full md:w-1/2 border border-gray-300 rounded-2xl p-3 text-2xl">
+                            <input type="number" id="profit-subsidy" step="1" value="40" min="0" max="100" class="w-full border border-gray-300 rounded-md p-2 focus:ring-green-500 focus:border-green-500">
                         </div>
-                        <button type="submit" class="md:col-span-2 w-full md:w-auto bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-8 rounded-2xl transition text-xl">Рассчитать</button>
+                        <button type="submit" class="col-span-2 w-full bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-4 rounded-md transition">Рассчитать</button>
                     </form>
-                    <div id="profit-result" class="mt-6 hidden">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-                            <div class="rounded-2xl bg-gray-50 p-4 border border-gray-100"><p class="text-gray-500">Выручка</p><p id="profit-revenue" class="text-4xl font-black text-emerald-800">—</p></div>
-                            <div class="rounded-2xl bg-gray-50 p-4 border border-gray-100"><p class="text-gray-500">Прибыль</p><p id="profit-net" class="text-4xl font-black text-gray-900">—</p></div>
-                            <div class="rounded-2xl bg-gray-50 p-4 border border-gray-100"><p class="text-gray-500">ROI</p><p id="profit-roi" class="text-4xl font-black text-emerald-800">—</p></div>
+                    <div id="profit-result" class="mt-5 hidden">
+                        <div class="grid grid-cols-3 gap-3 text-sm">
+                            <div class="rounded-lg bg-green-50 p-4 border border-green-200"><p class="text-gray-500 text-xs">Выручка</p><p id="profit-revenue" class="text-xl font-black text-green-800">—</p></div>
+                            <div class="rounded-lg bg-green-50 p-4 border border-green-200"><p class="text-gray-500 text-xs">Прибыль</p><p id="profit-net" class="text-xl font-black text-green-800">—</p></div>
+                            <div class="rounded-lg bg-green-50 p-4 border border-green-200"><p class="text-gray-500 text-xs">ROI</p><p id="profit-roi" class="text-xl font-black text-green-800">—</p></div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <div class="flex items-center mb-6">
-                        <div class="text-3xl mr-3">🧪</div>
-                        <h2 class="text-xl font-bold">Стоимость защиты (СЗР)</h2>
-                    </div>
-                    <p class="text-xs text-gray-600 mb-4">
-                        Технология АО «Щёлково Агрохим» ·
-                        <a href="https://betaren.ru/catalog/" target="_blank" rel="noopener noreferrer" class="text-green-700 hover:underline font-semibold">Каталог на betaren.ru ↗</a>
-                        · ⚠️ Цены справочные
-                    </p>
-                    <form id="protection-calc-form" class="grid grid-cols-1 md:grid-cols-2 gap-4" onsubmit="event.preventDefault(); calculateProtectionCost();">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Культура</label>
-                            <select id="protection-crop" class="w-full border border-gray-300 rounded-md p-2">
-                                <option value="wheat">Пшеница озимая</option>
-                                <option value="soy">Соя</option>
-                                <option value="sunflower">Подсолнечник</option>
-                                <option value="corn">Кукуруза</option>
-                            </select>
+            <!-- Строка 2: калькулятор СЗР во всю ширину -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hidden">
+                <div class="flex items-center mb-5">
+                    <div class="text-3xl mr-3">🧪</div>
+                    <h2 class="text-xl font-bold">Стоимость защиты (СЗР)</h2>
+                </div>
+                <p class="text-xs text-gray-600 mb-4">
+                    Технология АО «Щёлково Агрохим» ·
+                    <a href="https://betaren.ru/catalog/" target="_blank" rel="noopener noreferrer" class="text-green-700 hover:underline font-semibold">Каталог на betaren.ru ↗</a>
+                    · ⚠️ Цены справочные
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-1">
+                        <form id="protection-calc-form" class="space-y-4" onsubmit="event.preventDefault(); calculateProtectionCost();">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Культура</label>
+                                <select id="protection-crop" class="w-full border border-gray-300 rounded-md p-2">
+                                    <option value="wheat">Пшеница озимая</option>
+                                    <option value="soy">Соя</option>
+                                    <option value="sunflower">Подсолнечник</option>
+                                    <option value="corn">Кукуруза</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Площадь, га</label>
+                                <input type="number" id="protection-area" step="1" value="100" required class="w-full border border-gray-300 rounded-md p-2">
+                            </div>
+                            <button type="submit" class="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-4 rounded-md transition">Рассчитать стоимость</button>
+                        </form>
+                        <div id="protection-result" class="mt-5 bg-cyan-50 p-4 rounded-lg border border-cyan-200 hidden">
+                            <p class="text-sm text-gray-600">Оценка затрат на программу защиты:</p>
+                            <p class="text-2xl font-black text-cyan-900 mt-1"><span id="protection-total">—</span> ₽</p>
+                            <p class="text-sm text-gray-700 mt-1">На 1 га: <span id="protection-per-ha" class="font-bold">—</span> ₽</p>
+                            <p class="text-xs text-gray-500 mt-2">Справочно, по усреднённой схеме препаратов. Для КП используйте форму выше.</p>
+                            <button type="button" onclick="goToLeadForm()" class="mt-4 w-full bg-green-700 hover:bg-green-800 text-white font-bold py-2.5 px-4 rounded-md transition">
+                                Получить более детальное КП
+                            </button>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Площадь, га</label>
-                            <input type="number" id="protection-area" step="1" value="100" required class="w-full border border-gray-300 rounded-md p-2">
-                        </div>
-                        <button type="submit" class="md:col-span-2 w-full bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-4 rounded-md transition">Рассчитать стоимость</button>
-                    </form>
-                    <div id="protection-result" class="mt-6 bg-cyan-50 p-4 rounded-lg border border-cyan-200 hidden">
-                        <p class="text-sm text-gray-600">Оценка затрат на программу защиты:</p>
-                        <p class="text-2xl font-black text-cyan-900 mt-1"><span id="protection-total">—</span> ₽</p>
-                        <p class="text-sm text-gray-700 mt-1">На 1 га: <span id="protection-per-ha" class="font-bold">—</span> ₽</p>
-                        <p class="text-xs text-gray-500 mt-2">Справочно, по усреднённой схеме препаратов. Для КП используйте форму выше.</p>
-                        <button type="button" onclick="goToLeadForm()" class="mt-4 bg-green-700 hover:bg-green-800 text-white font-bold py-2.5 px-4 rounded-md transition">
-                            Получить более детальное КП
-                        </button>
                     </div>
-                    <div class="mt-6 overflow-x-auto">
+                    <div class="md:col-span-2 overflow-x-auto">
                         <table class="min-w-full text-xs border border-gray-200 rounded-lg">
                             <thead class="bg-gray-50 text-gray-700">
                                 <tr>
@@ -707,28 +836,8 @@
                         </table>
                     </div>
                 </div>
-                </div>
-
-                <div class="space-y-6">
-                    <div class="bg-gradient-to-r from-gray-800 to-gray-700 p-6 rounded-xl shadow-sm text-white flex items-center justify-between">
-                        <div>
-                            <h2 class="text-lg font-bold flex items-center mb-2"><span class="mr-2">🤖</span> AI-Ассистент Агронома</h2>
-                            <p class="text-sm text-gray-300">Загрузите фото поля или опишите симптомы заболевания для автоматического распознавания (Бета-версия).</p>
-                        </div>
-                        <button class="bg-white text-gray-800 px-4 py-2 rounded font-bold text-sm hover:bg-gray-100 transition whitespace-nowrap ml-4">Попробовать</button>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                        <h2 class="text-xl font-bold mb-4">📍 Спутниковый мониторинг NDVI</h2>
-                        <div class="w-full h-40 bg-gray-100 rounded flex items-center justify-center border-2 border-dashed border-gray-300">
-                            <div class="text-center text-gray-500">
-                                <div class="text-3xl mb-2">🛰️</div>
-                                <p class="text-sm">Интеграция с кадастровой картой.<br>Доступно в Pro-версии.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
+
         </section>
 
     </main>
@@ -743,9 +852,12 @@
                 <div>
                     <h4 class="font-bold mb-3 uppercase text-sm text-gray-300">Разделы</h4>
                     <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-white transition">Аналитика</a></li>
-                        <li><a href="#" class="hover:text-white transition">База знаний</a></li>
-                        <li><a href="#" class="hover:text-white transition">Форум экспертов</a></li>
+                        <li><a href="#" onclick="event.preventDefault(); navigate('home')" class="hover:text-white transition">Главная</a></li>
+                        <li><a href="#" onclick="event.preventDefault(); navigate('catalog')" class="hover:text-white transition">Каталог сортов</a></li>
+                        <li><a href="#" onclick="event.preventDefault(); navigate('agronomy')" class="hover:text-white transition">Агрономия</a></li>
+                        <li><a href="#" onclick="event.preventDefault(); navigate('genetics')" class="hover:text-white transition">Селекция</a></li>
+                        <li><a href="#" onclick="event.preventDefault(); navigate('market')" class="hover:text-white transition">Рынок</a></li>
+                        <li><a href="#" onclick="event.preventDefault(); goToTools()" class="hover:text-white transition">Инструменты</a></li>
                     </ul>
                 </div>
                 <div>
@@ -765,6 +877,64 @@
         </div>
     </footer>
 
+    <!-- AI-Ассистент Агронома (чат-виджет) -->
+    <div id="ai-chat-btn" onclick="toggleAiChat()" title="AI-Ассистент Агронома"
+         class="fixed bottom-5 right-5 z-50 w-14 h-14 rounded-full bg-green-700 hover:bg-green-800 text-white shadow-xl flex items-center justify-center cursor-pointer transition-transform hover:scale-105 select-none"
+         style="box-shadow: 0 4px 24px rgba(21,128,61,0.35)">
+        <span id="ai-chat-icon" class="text-2xl">🤖</span>
+    </div>
+
+    <div id="ai-chat-panel" class="fixed bottom-24 right-5 z-50 hidden flex-col w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden"
+         style="max-height: 520px">
+        <div class="bg-green-700 px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="text-xl">🤖</span>
+                <div>
+                    <p class="text-white font-bold text-sm leading-tight">AI-Ассистент Агронома</p>
+                    <p class="text-green-200 text-xs">озимая.рф · Щелково Агрохим</p>
+                </div>
+            </div>
+            <button onclick="toggleAiChat()" class="text-white/70 hover:text-white text-xl leading-none">&times;</button>
+        </div>
+
+        <div id="ai-chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50" style="min-height:200px; max-height:320px">
+            <div class="flex gap-2">
+                <span class="text-lg shrink-0">🤖</span>
+                <div class="bg-white border border-gray-200 rounded-2xl rounded-tl-sm px-3 py-2 text-sm text-gray-800 shadow-sm max-w-[85%]">
+                    Добрый день! Я помогу подобрать сорт, расскажу о технологии выращивания или отвечу на вопросы по агрохимии. Спросите меня или выберите тему:
+                </div>
+            </div>
+            <div id="ai-chat-suggestions" class="flex flex-wrap gap-2 pl-7">
+                <button onclick="aiAsk('Какой сорт выбрать для ЦЧР?')" class="ai-chip">🌾 Сорт для ЦЧР</button>
+                <button onclick="aiAsk('Норма высева озимой пшеницы')" class="ai-chip">🧮 Норма высева</button>
+                <button onclick="aiAsk('Какой сорт самый урожайный?')" class="ai-chip">🏆 Топ по урожайности</button>
+                <button onclick="aiAsk('Как защитить от ржавчины?')" class="ai-chip">🧪 Защита от ржавчины</button>
+                <button onclick="aiAsk('Хочу получить коммерческое предложение')" class="ai-chip">📦 Получить КП</button>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-100 p-3 bg-white flex gap-2">
+            <input id="ai-chat-input" type="text" placeholder="Напишите вопрос…"
+                   class="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-green-500"
+                   onkeydown="if(event.key==='Enter') aiSend()">
+            <button onclick="aiSend()" class="bg-green-700 hover:bg-green-800 text-white rounded-lg px-3 py-2 text-sm font-bold transition">→</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно карточки сорта -->
+    <div id="variety-modal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
+        <div class="absolute inset-0 bg-black/50" onclick="closeVarietyModal()"></div>
+        <div class="relative z-10 flex items-start justify-center min-h-screen p-4 pt-10">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto">
+                <div class="sticky top-0 bg-white border-b border-gray-100 flex items-center justify-between px-6 py-4 rounded-t-2xl">
+                    <h2 id="modal-title" class="text-xl font-bold text-gray-900"></h2>
+                    <button onclick="closeVarietyModal()" class="text-gray-400 hover:text-gray-700 text-2xl font-bold leading-none">&times;</button>
+                </div>
+                <div id="modal-body" class="px-6 py-5 space-y-5 text-sm text-gray-700"></div>
+            </div>
+        </div>
+    </div>
+
     <script src="agronomy.js"></script>
     <script>
         const state = {
@@ -772,7 +942,7 @@
             chartsRendered: false
         };
         const varieties = [
-            { name: 'Ермоловка', region: 'Центральный регион', maturity: 'Среднепоздний', avgYield: '131.4 ц/га', maxYield: '165.7 ц/га', protein: 'более 15%' },
+            { name: 'Ермоловка', region: 'Центральный / ЦЧР', maturity: 'Среднепоздний', avgYield: '131.4 ц/га', maxYield: '165.7 ц/га', protein: 'более 15%' },
             { name: 'Володя', region: 'ЦЧР / СКФО / Средневолжье', maturity: 'Среднеспелый', avgYield: '108.6 ц/га', maxYield: '122.6 ц/га', protein: 'до 18.2%' },
             { name: 'ДФ 2020', region: 'Средневолжье / Урал', maturity: 'Среднеранний', avgYield: '118.6 ц/га', maxYield: '124.6 ц/га', protein: 'ценная пшеница' },
             { name: 'Интеза', region: 'Центральный регион / СКФО', maturity: 'Среднеранний', avgYield: '118.5 ц/га', maxYield: '129.1 ц/га', protein: 'до 15.9%' },
@@ -790,7 +960,17 @@
             mobileMenu.classList.toggle('hidden');
         });
 
+        function isMobile() { return window.innerWidth < 768; }
+
         function navigate(targetViewId) {
+            mobileMenu.classList.add('hidden');
+
+            if (isMobile()) {
+                const el = document.getElementById(`view-${targetViewId}`);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                return;
+            }
+
             state.currentView = targetViewId;
 
             document.querySelectorAll('.view-section').forEach(el => {
@@ -807,7 +987,7 @@
                 }
             });
 
-            mobileMenu.classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
 
             if (!state.chartsRendered && (targetViewId === 'market' || targetViewId === 'genetics')) {
                 initCharts();
@@ -1023,7 +1203,7 @@
                 const card = document.createElement('article');
                 card.className = 'bg-white p-5 rounded-xl shadow-sm border border-gray-100';
                 card.innerHTML = `
-                    <h3 class="text-lg font-bold">${v.name}</h3>
+                    <h3 class="text-lg font-bold cursor-pointer hover:text-green-700 transition" onclick="openVarietyModal('${v.name.replace(/'/g, "\\'")}')">${v.name}</h3>
                     <ul class="mt-3 text-sm text-gray-700 space-y-1">
                         <li><strong>Регион:</strong> ${v.region}</li>
                         <li><strong>Срок:</strong> ${v.maturity}</li>
@@ -1033,7 +1213,10 @@
                         <li><strong>Технология:</strong> адаптированная карта выращивания под регион</li>
                         <li><strong>Агрохимия:</strong> рекомендуемая схема СЗР и питания</li>
                     </ul>
-                    <button class="mt-4 bg-green-700 hover:bg-green-800 text-white text-sm font-semibold py-2 px-3 rounded" onclick="orderVariety('${v.name.replace(/'/g, "\\'")}')">Получить КП</button>
+                    <div class="mt-4 flex gap-2">
+                        <button class="flex-1 border border-green-700 text-green-700 hover:bg-green-50 text-sm font-semibold py-2 px-3 rounded transition" onclick="openVarietyModal('${v.name.replace(/'/g, "\\'")}')">Узнать подробнее</button>
+                        <button class="flex-1 bg-green-700 hover:bg-green-800 text-white text-sm font-semibold py-2 px-3 rounded transition" onclick="orderVariety('${v.name.replace(/'/g, "\\'")}')">Получить КП</button>
+                    </div>
                 `;
                 grid.appendChild(card);
             });
@@ -1054,30 +1237,97 @@
 
         function orderVariety(name) {
             navigate('home');
-            const select = document.getElementById('lead-variety');
-            if (select) select.value = name;
-            document.getElementById('lead-form').scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+                const checkbox = document.querySelector(`input[name="lead-variety"][value="${name}"]`);
+                if (checkbox) checkbox.checked = true;
+                document.getElementById('lead-form').scrollIntoView({ behavior: 'smooth' });
+            }, isMobile() ? 0 : 50);
         }
 
-        function submitLead(event) {
+        async function submitLead(event) {
             event.preventDefault();
-            const company = document.getElementById('lead-company').value;
-            const variety = document.getElementById('lead-variety').value;
-            const pack = document.getElementById('lead-package').value;
-            const volume = document.getElementById('lead-volume').value;
-            const out = document.getElementById('lead-result');
-            out.textContent = `Заявка принята: ${company}, сорт "${variety}", пакет "${pack}", объем ${volume} т. Мы подготовим коммерческое предложение с технологией и агрохимией.`;
-            out.classList.remove('hidden');
+            const company  = document.getElementById('lead-company').value.trim();
+            const name     = document.getElementById('lead-name').value.trim();
+            const phone    = document.getElementById('lead-phone').value.trim();
+            const checkedVarieties = [...document.querySelectorAll('input[name="lead-variety"]:checked')].map(cb => cb.value);
+            const variety  = checkedVarieties.length > 0 ? checkedVarieties.join(', ') : 'не указан';
+            const pack     = document.getElementById('lead-package').value;
+            const volume   = document.getElementById('lead-volume').value;
+            const out      = document.getElementById('lead-result');
+            const btn      = document.querySelector('#lead-form button[type="submit"]');
+
+            const phoneDigits = phone.replace(/\D/g, '');
+            if (phoneDigits.length !== 11 || !phoneDigits.startsWith('7')) {
+                out.className = 'mt-4 p-3 rounded bg-red-50 border border-red-200 text-sm text-red-800';
+                out.textContent = '⚠️ Введите корректный номер телефона в формате +7 (XXX) XXX-XX-XX';
+                out.classList.remove('hidden');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Отправляем…';
+            out.classList.add('hidden');
+
+            const WEBHOOK = 'https://b24-janwud.bitrix24.ru/rest/1/xe3y6y2kxdg226uv/crm.lead.add.json';
+
+            const params = new URLSearchParams({
+                'fields[TITLE]':        `Заявка с озимая.рф — ${company}`,
+                'fields[NAME]':         name,
+                'fields[COMPANY_TITLE]':company,
+                'fields[PHONE][0][VALUE]':      phone,
+                'fields[PHONE][0][VALUE_TYPE]': 'WORK',
+                'fields[COMMENTS]':     `Сорта: ${variety}\nПакет: ${pack}\nПлощадь посева: ${volume} га`,
+                'fields[SOURCE_ID]':    'WEB',
+                'fields[SOURCE_DESCRIPTION]': 'Форма на сайте озимая.рф',
+            });
+
+            try {
+                const res = await fetch(WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: params.toString(),
+                });
+                const json = await res.json();
+                if (json.result) {
+                    out.className = 'mt-4 p-3 rounded bg-green-50 border border-green-200 text-sm text-green-800';
+                    out.textContent = `✅ Заявка принята! Мы свяжемся с вами в ближайшее время. (${company}, ${volume} га)`;
+                    document.getElementById('lead-form').reset();
+                } else {
+                    throw new Error(JSON.stringify(json));
+                }
+            } catch (e) {
+                out.className = 'mt-4 p-3 rounded bg-red-50 border border-red-200 text-sm text-red-800';
+                out.innerHTML = '⚠️ Не удалось отправить заявку. Позвоните нам напрямую: <a href="tel:+74957450551" class="font-semibold underline">+7 (495) 745-05-51</a> или попробуйте позже.';
+                console.error('Bitrix24 lead error:', e);
+            } finally {
+                out.classList.remove('hidden');
+                btn.disabled = false;
+                btn.textContent = 'Отправить заявку';
+            }
         }
 
         function goToLeadForm() {
+            mobileMenu.classList.add('hidden');
+            if (isMobile()) {
+                document.getElementById('lead-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                return;
+            }
             navigate('home');
-            document.getElementById('lead-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => {
+                document.getElementById('lead-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 50);
         }
 
         function goToTools() {
+            mobileMenu.classList.add('hidden');
+            if (isMobile()) {
+                document.getElementById('home-tools')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                return;
+            }
             navigate('home');
-            document.getElementById('home-tools')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => {
+                document.getElementById('home-tools')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 50);
         }
 
         const toolsSection = document.getElementById('view-tools');
@@ -1089,12 +1339,65 @@
             homeToolsAnchor.appendChild(toolsSection);
         }
 
+        if (isMobile()) {
+            const chartObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !state.chartsRendered) {
+                        initCharts();
+                        state.chartsRendered = true;
+                        chartObserver.disconnect();
+                    }
+                });
+            }, { threshold: 0.1 });
+            const geneticsEl = document.getElementById('view-genetics');
+            const marketEl = document.getElementById('view-market');
+            if (geneticsEl) chartObserver.observe(geneticsEl);
+            if (marketEl) chartObserver.observe(marketEl);
+        }
+
         document.getElementById('lead-form')?.addEventListener('submit', submitLead);
+
+        const phoneInput = document.getElementById('lead-phone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function (e) {
+                let digits = e.target.value.replace(/\D/g, '');
+                if (digits.startsWith('8')) digits = '7' + digits.slice(1);
+                if (digits.startsWith('7')) digits = digits.slice(0, 11);
+                else digits = digits.slice(0, 11);
+
+                let formatted = '';
+                if (digits.length === 0) {
+                    formatted = '';
+                } else {
+                    formatted = '+7';
+                    const local = digits.startsWith('7') ? digits.slice(1) : digits;
+                    if (local.length > 0) formatted += ' (' + local.slice(0, 3);
+                    if (local.length >= 4) formatted += ') ' + local.slice(3, 6);
+                    if (local.length >= 7) formatted += '-' + local.slice(6, 8);
+                    if (local.length >= 9) formatted += '-' + local.slice(8, 10);
+                }
+                e.target.value = formatted;
+            });
+
+            phoneInput.addEventListener('keydown', function (e) {
+                if (e.key === 'Backspace' && this.value === '+7 (') {
+                    this.value = '';
+                }
+            });
+
+            phoneInput.addEventListener('focus', function () {
+                if (this.value === '') this.value = '+7 (';
+            });
+
+            phoneInput.addEventListener('blur', function () {
+                if (this.value === '+7 (') this.value = '';
+            });
+        }
         document.getElementById('catalog-search')?.addEventListener('input', filterCatalog);
         document.getElementById('catalog-region')?.addEventListener('change', filterCatalog);
         document.getElementById('catalog-maturity')?.addEventListener('change', filterCatalog);
 
-        const leadVariety = document.getElementById('lead-variety');
+        const varietyGroup = document.getElementById('lead-variety-group');
         const regionFilter = document.getElementById('catalog-region');
         const regions = [...new Set(varieties.map(v => v.region))];
         regions.forEach((r) => {
@@ -1104,14 +1407,344 @@
             regionFilter?.appendChild(opt);
         });
         varieties.forEach((v) => {
-            const opt = document.createElement('option');
-            opt.value = v.name;
-            opt.textContent = v.name;
-            leadVariety?.appendChild(opt);
+            const label = document.createElement('label');
+            label.className = 'flex items-center gap-2 border border-gray-200 rounded-lg p-2.5 cursor-pointer hover:bg-green-50 hover:border-green-400 transition select-none';
+            label.innerHTML = `<input type="checkbox" name="lead-variety" value="${v.name}" class="accent-green-700 w-4 h-4 shrink-0"><span class="text-sm text-gray-800 leading-snug">${v.name}</span>`;
+            varietyGroup?.appendChild(label);
         });
         renderCatalog(varieties);
 
         showAgronomyDetail('stage0', document.querySelector('[data-agronomy-stage="stage0"]'));
+
+        // ─── Данные карточек сортов (из материалов ССЦ Щёлково Агрохим) ───
+        const varietyDetails = {
+            'Ермоловка': {
+                patent: 'АО «Щелково Агрохим»',
+                registry: '2025 г., Центральный / ЦЧР',
+                biotype: 'Высокотехнологичный сорт с повышенным уровнем регенерационной способности к отрастанию весной. Высота стебля — до 90 см. Устойчив к полеганию и осыпанию. Среднепоздний — созревает на 2–3 дня позже стандарта Московская 39.',
+                morphology: 'Разновидность — лютесценс. Колос белый, призматический, крупный (10–12 см), средней плотности (2,1–2,3 колоска/см). Флаговый лист широкий, интенсивно-зелёный с восковым налётом, не опушён. Форма куста — прямостоячая, листья эректоидной формы, продуктивная кустистость более 3 стеблей.',
+                agrobio: 'Первый высокотехнологичный сорт отечественной селекции, сформировавший 165,7 ц/га (НПО «Бетагран семена», 2022 г.). Средняя урожайность 131,4 ц/га — на 21,3 ц/га выше стандарта. Трижды вошёл в Книгу рекордов России: 112,7 (2022), 122,6 (2023) и 140,2 ц/га (2025). Оплата урожаем на 1 кг д.в. азота — до 10 кг зерна. Белок более 15%, клейковина более 30%.',
+                resistance: 'Устойчив к жёлтой, бурой и стеблевой ржавчине, вирусным заболеваниям. По мучнистой росе — на уровне стандарта; слабее — к септориозу.'
+            },
+            'Система': {
+                patent: 'АО «Щелково Агрохим» / АО Агрохолдинг «Степь»',
+                registry: '2025 г., Северо-Кавказский регион (6-й)',
+                biotype: 'Низкорослый, высокоинтенсивного типа, высота 80–90 см. Устойчив к полеганию и осыпанию. Среднеспелый — на 3 дня раньше стандарта Московская 39.',
+                morphology: 'Разновидность — лютесценс. Колос белый, призматический, длиной до 10 см и более, средней плотности (2,0–2,3 колоска/см). Флаговый лист широкий и пониклый, интенсивно-зелёный с обильным восковым налётом, со слабым опушением.',
+                agrobio: 'Высокоинтенсивный тип — способен формировать свыше 120 ц/га. Средняя урожайность 118,9 ц/га, максимальная — 127,8 ц/га (2023 г.). В производстве Агрохолдинга «СТЕПЬ» — 101,3 ц/га (Краснодарский край, 2021). В международных испытаниях в Турции — 100,4 ц/га. Ценная пшеница, способна сформировать зерно с белком более 16%.',
+                resistance: 'Устойчив к стеблевой и жёлтой ржавчине, вирусным заболеваниям. Толерантен к бурой ржавчине без снижения продуктивности. Восприимчив к фузариозу колоса.'
+            },
+            'Изумруд Дубовицкого': {
+                patent: 'АО «Щелково Агрохим»',
+                registry: '2026 г., ЦЧР (5-й), Средневолжский (7-й), Уральский (9-й)',
+                biotype: 'Низкорослый, интенсивного типа, высота 80–90 см. Раннеспелый — на 3–5 дней раньше стандарта Московская 39. Устойчив к полеганию и осыпанию. Занимает свыше 150 тыс. га.',
+                morphology: 'Разновидность — лютесценс. Колос безостый, белый, цилиндрический (при благоприятных условиях — булавовидный), высокоозернённый, без воскового налёта. Тип куста — полупрямостоячий; продуктивная кустистость до 3,6 стеблей. Лист в период колошения ярко-зелёный, без или со слабым восковым налётом.',
+                agrobio: 'Высокое сочетание адаптивных свойств (зимо- и засухоустойчивость) с отзывчивостью на факторы интенсификации. Средняя урожайность 109,1 ц/га, максимальная — 115,6 ц/га (2022 г.). В производстве в Оренбургской обл. на 1 000 га — 83,0 ц/га. Проявил высокую пластичность в Орловской, Оренбургской, Самарской, Ульяновской, Курганской областях и Мордовии.',
+                resistance: 'Устойчив к пыльной и твёрдой головне, септориозу. Восприимчив к бурой ржавчине и мучнистой росе.'
+            },
+            'Интеза': {
+                patent: 'АО «Щелково Агрохим»',
+                registry: '2026 г., Центральный (3-й), Северо-Кавказский (6-й)',
+                biotype: 'Низкорослый, высокоинтенсивного типа, высота 75–90 см. Среднеранний — на 2–3 дня раньше стандарта Московская 39. Устойчив к полеганию и осыпанию.',
+                morphology: 'Разновидность — лютесценс. Колос белый, безостый, цилиндрический, до 10 см, средней плотности (2,1–2,3 колоска/см). Зерновка красная, овально-удлинённой формы. Масса 1000 зёрен — 42–50 г. Восковой налёт на колосе и флаговом листе — средний.',
+                agrobio: 'Стабильно высокая продуктивность — свыше 100 ц/га в производстве. Средняя урожайность 118,5 ц/га, максимальная — 129,1 ц/га (2023 г.). В производстве НПО «Бетагран семена» — 114,0 ц/га (2024 г.). Высокая конкурентоспособность в международных испытаниях — 99,6 ц/га (Турция). Ценная пшеница, белок 15,9% при урожайности 112,7 ц/га (2025 г.).',
+                resistance: 'Высокоустойчива к бурой ржавчине. Умеренно устойчива к мучнистой росе и септориозу. Восприимчива к фузариозу колоса и твёрдой головне.'
+            },
+            'Сократ': {
+                patent: 'АО «Щелково Агрохим»',
+                registry: '2026 г., Центральный регион (3-й)',
+                biotype: 'Высокотехнологичный сорт с повышенной регенерационной способностью весной. Высота стебля — до 90 см. Устойчив к полеганию и осыпанию. Среднепоздний — на 2–3 дня позже Московская 39.',
+                morphology: 'Разновидность — лютесценс. Колос белый, цилиндрический (во влажные годы — булавовидный), крупный (10–12 см), средней плотности (2,2–2,4 колоска/см). Флаговый лист широкий, эректоидный, интенсивно-зелёный с сильным восковым налётом, не опушён. Продуктивная кустистость более 3 стеблей.',
+                agrobio: 'Высокотехнологичный сорт — до 163,0 ц/га (НПО «Бетагран семена», 2022 г.). Средняя урожайность 136,2 ц/га — на 26,1 ц/га выше стандарта. Озернённость колоска — до 5 шт., до 80 зёрен в колосе, масса зерна с колоса — свыше 2 г. Повышенная регенерация весной. По технологическим свойствам зерна — филлер.',
+                resistance: 'Устойчив к жёлтой ржавчине, вирусным заболеваниям. Толерантен к бурой ржавчине без снижения продуктивности. Мучнистая роса и септориоз — на уровне стандарта.'
+            },
+            'Воло́дя': {
+                patent: 'ООО «Актив Агро» / АО «Щелково Агрохим»',
+                registry: '2022 г., ЦЧР (5-й), Северо-Кавказский (6-й), Средневолжский (7-й)',
+                biotype: 'Низкорослый, высокоинтенсивного типа, высота 75–90 см. Среднеспелый — на 2–3 дня раньше стандарта Московская 39. Устойчив к полеганию и осыпанию.',
+                morphology: 'Разновидность — лютесценс. Колос белый, безостый, цилиндрический, 8–10 см, средней плотности. На верхушке — короткие остевидные заострения. Форма куста — полустелющаяся. Лист в фазу колошения — пониклый, среднего размера, со слабым восковым налётом.',
+                agrobio: 'Стабильно высокая продуктивность — свыше 100 ц/га. Средняя урожайность 108,6 ц/га, максимальная — 122,6 ц/га (2022 г.). В производстве — 97,8 ц/га. Международные испытания в Турции — 99,6 ц/га. Сильная пшеница: белок 18,2% при урожайности 70 ц/га (2021 г.).',
+                resistance: 'Высокоустойчив к бурой ржавчине. Умеренно устойчив к мучнистой росе и септориозу. Восприимчив к фузариозу колоса и твёрдой головне.'
+            },
+            'ДФ 2020': {
+                patent: 'АО «Щелково Агрохим»',
+                registry: '2024 г., Средневолжский (7-й), Уральский (9-й)',
+                biotype: 'Интенсивного типа, высота до 100 см. Среднеранний, вегетационный период 295–305 дней. Устойчив к полеганию и осыпанию.',
+                morphology: 'Разновидность — лютесценс. Тип куста — прямостоячий, продуктивная кустистость 1,9–2,5 стебля. Соломина полая, утолщённая, высотой 90–95 см. Колос безостый, белый, прямоугольной формы, высокоозернённый. Масса 1000 зёрен — 38–45 г, натура — 760–810 г/л.',
+                agrobio: 'Повышенный уровень адаптивных свойств (зимо- и засухоустойчивость). Средняя урожайность 118,6 ц/га, максимальная — 124,6 ц/га. В производстве 85,4 ц/га (АГЛОС, 2023). Экологические испытания — 97,8 ц/га (Агрофирма «Мценская», 2022). При засухе на площади 2 700 га — 56,7 ц/га (Ульяновская обл., 2025).',
+                resistance: 'Устойчив к пыльной и твёрдой головне, септориозу. Восприимчив к бурой ржавчине и мучнистой росе. Толерантен к повреждению клопом вредной черепашки.'
+            }
+        };
+
+        function openVarietyModal(name) {
+            const d = varietyDetails[name];
+            if (!d) return;
+            document.getElementById('modal-title').textContent = name;
+            document.getElementById('modal-body').innerHTML = `
+                <div class="flex flex-wrap gap-3 text-xs">
+                    <span class="bg-green-50 border border-green-200 rounded-full px-3 py-1 text-green-800 font-medium">Патентообладатель: ${d.patent}</span>
+                    <span class="bg-blue-50 border border-blue-200 rounded-full px-3 py-1 text-blue-800 font-medium">Госреестр: ${d.registry}</span>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-1">Общая биологическая характеристика</h3>
+                    <p class="leading-relaxed">${d.biotype}</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-1">Морфологические признаки</h3>
+                    <p class="leading-relaxed">${d.morphology}</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-1">Агробиологическая характеристика</h3>
+                    <p class="leading-relaxed">${d.agrobio}</p>
+                </div>
+                <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                    <h3 class="font-bold text-amber-900 mb-1">Устойчивость к болезням</h3>
+                    <p class="leading-relaxed text-amber-900">${d.resistance}</p>
+                </div>
+                <div class="pt-2 flex gap-3">
+                    <button onclick="orderVariety('${name.replace(/'/g, "\\'")}'); closeVarietyModal();" class="flex-1 bg-green-700 hover:bg-green-800 text-white font-bold py-2.5 px-4 rounded-lg transition text-sm">Получить КП</button>
+                    <button onclick="closeVarietyModal()" class="flex-1 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold py-2.5 px-4 rounded-lg transition text-sm">Закрыть</button>
+                </div>
+            `;
+            document.getElementById('variety-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVarietyModal() {
+            document.getElementById('variety-modal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') { closeVarietyModal(); }
+        });
+
+        // ─── AI-Ассистент Агронома ───
+        const aiKnowledge = [
+            {
+                keys: ['ермоловка'],
+                answer: '🌾 <b>Ермоловка</b> — флагман линейки. Рекордная урожайность 165,7 ц/га, средняя 131,4 ц/га. Среднепоздний, Центральный / ЦЧР регион. Высокий белок (>15%), устойчив к ржавчине. Лучший выбор при интенсивной технологии.'
+            },
+            {
+                keys: ['сократ'],
+                answer: '🌾 <b>Сократ</b> — до 163 ц/га, средняя 136,2 ц/га. Крупный колос, до 80 зёрен. Среднепоздний, Центральный регион. Повышенная регенерация весной.'
+            },
+            {
+                keys: ['интеза'],
+                answer: '🌾 <b>Интеза</b> — стабильность + качество. Средняя 118,5 ц/га, белок до 15,9%. Среднеранний, Центральный / СКФО. Высокая устойчивость к бурой ржавчине.'
+            },
+            {
+                keys: ['система'],
+                answer: '🌾 <b>Система</b> — для Северного Кавказа (СКФО). Среднеспелый, до 127,8 ц/га. Белок >16%. Устойчив к стеблевой и жёлтой ржавчине.'
+            },
+            {
+                keys: ['изумруд', 'дубовицкого'],
+                answer: '🌾 <b>Изумруд Дубовицкого</b> — раннеспелый, засухо- и жаростойкий. Для ЦЧР, Поволжья, Урала. Средняя 109,1 ц/га. Занимает свыше 150 тыс. га.'
+            },
+            {
+                keys: ['володя', 'владимир'],
+                answer: '🌾 <b>Воло́дя</b> — сильная пшеница, белок до 18,2%. Среднеспелый, ЦЧР / СКФО / Средневолжье. Средняя 108,6 ц/га, высокоустойчив к бурой ржавчине.'
+            },
+            {
+                keys: ['дф 2020', 'дф2020', 'дф'],
+                answer: '🌾 <b>ДФ 2020</b> — среднеранний, для Поволжья и Урала. Высокая зимо- и засухоустойчивость. Средняя 118,6 ц/га.'
+            },
+            {
+                keys: ['урожайн', 'топ', 'лучш', 'рекорд'],
+                answer: '🏆 Топ по урожайности:\n1. <b>Ермоловка</b> — 165,7 ц/га (макс), 131,4 ц/га (ср)\n2. <b>Сократ</b> — 163 ц/га (макс), 136,2 ц/га (ср)\n3. <b>Интеза</b> — 129,1 ц/га (макс)\nВсе три — высокоинтенсивные сорта под интенсивную технологию.'
+            },
+            {
+                keys: ['цчр', 'черноземн', 'орёл', 'орел', 'курск', 'белгород', 'воронеж', 'тамбов', 'липецк'],
+                answer: '📍 Для <b>ЦЧР</b> рекомендуем:\n• <b>Ермоловка</b> или <b>Сократ</b> — максимальная урожайность\n• <b>Интеза</b> — стабильность + качество зерна\n• <b>Изумруд Дубовицкого</b> — если важна засухоустойчивость'
+            },
+            {
+                keys: ['скфо', 'краснодар', 'ставрополь', 'кавказ'],
+                answer: '📍 Для <b>СКФО</b> (Северный Кавказ) рекомендуем:\n• <b>Система</b> — специально для 6-го региона\n• <b>Интеза</b> и <b>Воло́дя</b> — также допущены для СКФО'
+            },
+            {
+                keys: ['поволж', 'самар', 'ульянов', 'саратов', 'урал', 'оренбург'],
+                answer: '📍 Для <b>Поволжья и Урала</b> рекомендуем:\n• <b>Изумруд Дубовицкого</b> — засухоустойчивость, широкий ареал\n• <b>ДФ 2020</b> — стабильность в засушливых условиях\n• <b>Воло́дя</b> — также допущен для Средневолжья'
+            },
+            {
+                keys: ['норм', 'высев', 'семян', 'калькулятор', 'расчёт', 'расчет'],
+                answer: '🧮 <b>Норма высева</b> озимой пшеницы:\nФормула: (Густота × Масса 1000 семян) / Хоз. годность\nОриентир: 4,0–5,5 млн всхожих семян/га\n\nВоспользуйтесь <b>калькулятором нормы высева</b> на вкладке «Инструменты» — он считает автоматически.'
+            },
+            {
+                keys: ['ржавчин', 'болезн', 'защит', 'фунгицид', 'септориоз', 'мучнист'],
+                answer: '🧪 <b>Защита от болезней</b> (по технологии Щелково Агрохим):\n• <b>Азорро КС</b> — протравитель, ВВСН 0 (перед посевом)\n• <b>Азофок</b> — фунгицид, кущение (ВВСН 27–29)\n• <b>Триада ККР</b> — флаговый лист (ВВСН 39)\n• <b>Пиксель МД</b> — колошение (ВВСН 53–57)\n\nПодробная схема — в разделе «Агрономия».'
+            },
+            {
+                keys: ['гербицид', 'сорняк'],
+                answer: '🌿 <b>Гербицидная защита:</b>\nБазово — фаза кущения (ВВСН 27–29). Препарат <b>Арго Прим МЭ</b> — против однодольных и двудольных сорняков.\n\nВидовой состав сорняков определяет выбор препарата. Подробнее — в разделе «Агрономия», этап «Кущение (весна)».'
+            },
+            {
+                keys: ['питание', 'удобрение', 'азот', 'биостим'],
+                answer: '🌱 <b>Питание и биостимуляция:</b>\n• <b>Биостим зерновой</b> — трубкование (ВВСН 31)\n• <b>Ультрамаг Комби</b> — листовое питание\n• Азотные подкормки: аммиачная селитра 150 кг/га в фазе ВВСН 31\n\nПолная схема по этапам — в разделе «Агрономия».'
+            },
+            {
+                keys: ['кп', 'коммерческ', 'предложени', 'цена', 'стоимост', 'купить', 'заказать', 'заявк'],
+                answer: '📦 Для получения <b>коммерческого предложения</b> заполните форму «Заявка на комплексное предложение» на главной странице — укажите хозяйство, контакт, сорт и площадь.\n\nМы подготовим КП: семена + технология + агрохимическая схема.',
+                action: () => { toggleAiChat(); goToLeadForm(); }
+            },
+            {
+                keys: ['сорт', 'какой', 'выбрать', 'подобрать', 'посоветуй', 'рекомендуй'],
+                answer: '🌾 Чтобы подобрать оптимальный сорт, уточните:\n• <b>Регион</b> — ЦЧР, СКФО, Поволжье, Урал?\n• <b>Приоритет</b> — максимальная урожайность, качество зерна или засухоустойчивость?\n\nНапишите регион — дам конкретную рекомендацию.'
+            },
+        ];
+
+        const aiFallback = 'Хороший вопрос! По этой теме лучше проконсультироваться с нашим агрономом. Позвоните по номеру <a href="tel:+74957450551" class="underline font-semibold">+7 (495) 745-05-51</a> или <a href="#" onclick="event.preventDefault();toggleAiChat();goToLeadForm();" class="underline font-semibold">оставьте заявку</a> — мы свяжемся с вами.';
+
+        function toggleAiChat() {
+            const panel = document.getElementById('ai-chat-panel');
+            panel.classList.toggle('open');
+        }
+
+        function aiAppendMessage(html, isUser = false) {
+            const msgs = document.getElementById('ai-chat-messages');
+            const suggestions = document.getElementById('ai-chat-suggestions');
+            if (suggestions) suggestions.remove();
+
+            const wrap = document.createElement('div');
+            wrap.className = isUser ? 'ai-msg-user' : 'ai-msg-bot';
+            wrap.innerHTML = isUser
+                ? `<div>${html}</div>`
+                : `<span class="text-lg shrink-0">🤖</span><div>${html.replace(/\n/g, '<br>')}</div>`;
+            msgs.appendChild(wrap);
+            msgs.scrollTop = msgs.scrollHeight;
+        }
+
+        function aiTyping() {
+            const msgs = document.getElementById('ai-chat-messages');
+            const wrap = document.createElement('div');
+            wrap.className = 'ai-msg-bot';
+            wrap.id = 'ai-typing';
+            wrap.innerHTML = `<span class="text-lg shrink-0">🤖</span><div class="text-gray-400 italic text-sm">печатает…</div>`;
+            msgs.appendChild(wrap);
+            msgs.scrollTop = msgs.scrollHeight;
+        }
+
+        function aiRemoveTyping() {
+            document.getElementById('ai-typing')?.remove();
+        }
+
+        function aiAsk(text) {
+            aiAppendMessage(text, true);
+            document.getElementById('ai-chat-input').value = '';
+            aiTyping();
+            setTimeout(() => {
+                aiRemoveTyping();
+                const lower = text.toLowerCase();
+                const match = aiKnowledge.find(k => k.keys.some(kw => lower.includes(kw)));
+                if (match) {
+                    aiAppendMessage(match.answer);
+                    if (match.action) setTimeout(match.action, 1200);
+                } else {
+                    aiAppendMessage(aiFallback);
+                }
+            }, 600);
+        }
+
+        function aiSend() {
+            const input = document.getElementById('ai-chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+            input.value = '';
+            aiAsk(text);
+        }
+
+    </script>
+
+    <script>
+        // Прогноз погоды для Орла (Open-Meteo, без ключа)
+        (function () {
+            const WMO = {
+                0: { icon: '☀️', label: 'Ясно' },
+                1: { icon: '🌤️', label: 'Преимущественно ясно' },
+                2: { icon: '⛅', label: 'Переменная облачность' },
+                3: { icon: '☁️', label: 'Пасмурно' },
+                45: { icon: '🌫️', label: 'Туман' },
+                48: { icon: '🌫️', label: 'Изморозь' },
+                51: { icon: '🌦️', label: 'Лёгкая морось' },
+                53: { icon: '🌦️', label: 'Морось' },
+                55: { icon: '🌧️', label: 'Сильная морось' },
+                61: { icon: '🌧️', label: 'Лёгкий дождь' },
+                63: { icon: '🌧️', label: 'Дождь' },
+                65: { icon: '🌧️', label: 'Сильный дождь' },
+                71: { icon: '🌨️', label: 'Лёгкий снег' },
+                73: { icon: '🌨️', label: 'Снег' },
+                75: { icon: '❄️', label: 'Сильный снег' },
+                77: { icon: '❄️', label: 'Крупа' },
+                80: { icon: '🌦️', label: 'Ливень' },
+                81: { icon: '🌧️', label: 'Ливень' },
+                82: { icon: '⛈️', label: 'Сильный ливень' },
+                85: { icon: '🌨️', label: 'Снегопад' },
+                86: { icon: '❄️', label: 'Сильный снегопад' },
+                95: { icon: '⛈️', label: 'Гроза' },
+                96: { icon: '⛈️', label: 'Гроза с градом' },
+                99: { icon: '⛈️', label: 'Гроза с сильным градом' },
+            };
+
+            const DAY_RU = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+            const MONTH_RU = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+
+            function fmt(dateStr) {
+                const d = new Date(dateStr + 'T12:00:00');
+                return DAY_RU[d.getDay()] + ', ' + d.getDate() + ' ' + MONTH_RU[d.getMonth()];
+            }
+
+            function getWmo(code) {
+                return WMO[code] || { icon: '🌡️', label: 'Данные получены' };
+            }
+
+            async function loadWeather() {
+                const url = 'https://api.open-meteo.com/v1/forecast?latitude=52.9651&longitude=36.0785&daily=temperature_2m_max,temperature_2m_min,weathercode,precipitation_sum,windspeed_10m_max&timezone=Europe%2FMoscow&forecast_days=5';
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    const data = await res.json();
+                    renderWeather(data.daily);
+                } catch (e) {
+                    document.getElementById('weather-loading').classList.add('hidden');
+                    document.getElementById('weather-error').classList.remove('hidden');
+                }
+            }
+
+            function renderWeather(daily) {
+                const grid = document.getElementById('weather-grid');
+                const loading = document.getElementById('weather-loading');
+                loading.classList.add('hidden');
+
+                const cards = daily.time.map((date, i) => {
+                    const wmo = getWmo(daily.weathercode[i]);
+                    const tmax = Math.round(daily.temperature_2m_max[i]);
+                    const tmin = Math.round(daily.temperature_2m_min[i]);
+                    const precip = (daily.precipitation_sum[i] || 0).toFixed(1);
+                    const wind = Math.round(daily.windspeed_10m_max[i]);
+                    const isToday = i === 0;
+
+                    return `<div class="flex flex-col items-center text-center p-3 rounded-xl border ${isToday ? 'border-green-400 bg-green-50' : 'border-gray-100 bg-gray-50'} gap-1">
+                        <p class="text-xs font-semibold ${isToday ? 'text-green-700' : 'text-gray-500'} leading-tight">${isToday ? 'Сегодня' : fmt(date)}</p>
+                        <span class="text-3xl leading-none my-1" title="${wmo.label}">${wmo.icon}</span>
+                        <p class="text-xs text-gray-500 leading-tight min-h-[2em] flex items-center justify-center">${wmo.label}</p>
+                        <div class="flex items-center gap-1 mt-1">
+                            <span class="text-base font-bold text-red-500">${tmax > 0 ? '+' : ''}${tmax}°</span>
+                            <span class="text-xs text-gray-400">/</span>
+                            <span class="text-base font-semibold text-blue-500">${tmin > 0 ? '+' : ''}${tmin}°</span>
+                        </div>
+                        <p class="text-xs text-blue-400 leading-tight">💧 ${precip} мм</p>
+                        <p class="text-xs text-gray-400 leading-tight">💨 ${wind} км/ч</p>
+                    </div>`;
+                });
+
+                grid.innerHTML = cards.join('');
+
+                const now = new Date();
+                document.getElementById('weather-updated').textContent =
+                    'Обновлено: ' + now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+            }
+
+            loadWeather();
+        })();
     </script>
 </body>
 </html>
