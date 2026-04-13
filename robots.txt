@@ -1,2 +1,6 @@
 User-agent: *
-Disallow: /
+Allow: /
+Sitemap: https://озимая.рф/sitemap.xml
+
+User-agent: Yandex
+Allow: /

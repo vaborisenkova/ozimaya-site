@@ -4,7 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow, noarchive">
-    <title>озимая.рф - Портал Озимой Пшеницы</title>
+    <title>Озимая пшеница — купить семена озимой пшеницы | Озимая.рф</title>
+    <meta name="description" content="Купить семена озимой пшеницы от Щёлково Агрохим. Сорта Гранат, Кремль, Кречет, Тундра. Технологии выращивания, агрохимия, расчёт нормы высева. Доставка по России.">
+    <meta name="keywords" content="озимая пшеница, купить озимую пшеницу, семена озимой пшеницы, озимая пшеница купить, сорта озимой пшеницы, семена пшеницы купить, Щёлково Агрохим">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://озимая.рф/">
+    <meta property="og:title" content="Озимая пшеница — купить семена от производителя">
+    <meta property="og:description" content="Семена озимой пшеницы премиальных сортов. Технологии выращивания, агрохимия, калькулятор прибыли.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://озимая.рф/">
+    <meta property="og:locale" content="ru_RU">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -176,6 +185,43 @@
             flex-direction: column;
         }
     </style>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Озимая.рф",
+      "url": "https://озимая.рф",
+      "description": "Семена озимой пшеницы от производителя. Сорта, технологии выращивания, агрохимия.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://озимая.рф/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Семена озимой пшеницы",
+      "description": "Семена озимой пшеницы сортов Гранат, Кремль, Кречет, Тундра от Щёлково Агрохим",
+      "brand": { "@type": "Brand", "name": "Щёлково Агрохим" },
+      "offers": {
+        "@type": "Offer",
+        "availability": "https://schema.org/InStock",
+      "priceCurrency": "RUB"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "КлимБиоТех",
+      "url": "https://озимая.рф",
+      "logo": "https://озимая.рф/images/shchelkovo-logo.png"
+    }
+    </script>
 </head>
 <body class="text-gray-800 antialiased flex flex-col min-h-screen">
 
@@ -241,7 +287,7 @@
                         <span class="text-xs text-green-100/90 max-w-md">Портал входит в экосистему продуктов и сервисов холдинга.</span>
                     </div>
                 </div>
-                <h1 class="text-3xl md:text-5xl font-bold mb-4">От семени до бункера: работаем на ваш урожай</h1>
+                <h1 class="text-3xl md:text-5xl font-bold mb-4">Озимая пшеница: от семени до бункера</h1>
                 <p class="text-green-100 text-lg md:text-xl max-w-2xl mb-2">Работаем с портфелем сортов селекции «Щелково Агрохим» и формируем комплексное B2B-решение: семена, технология выращивания и агрохимическое сопровождение.</p>
                 <p class="text-green-100 text-sm mb-6"></p>
                 <button onclick="isMobile() ? goToLeadForm() : navigate('catalog')" class="bg-yellow-500 hover:bg-yellow-400 text-green-900 font-bold py-3 px-6 rounded-lg transition shadow-md">
@@ -825,6 +871,14 @@
                 </div>
             </div>
 
+        </section>
+
+        <!-- Новости -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">📰 Новости</h2>
+            <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="col-span-3 text-center text-gray-400 py-6">Загрузка новостей…</div>
+            </div>
         </section>
 
     </main>
@@ -1731,6 +1785,23 @@
             }
 
             loadWeather();
+        })();
+
+        // Загрузка новостей
+        (function() {
+            const container = document.getElementById('news-container');
+            fetch('/news.json')
+                .then(r => r.json())
+                .then(news => {
+                    if (!news.length) { container.innerHTML = '<div class="col-span-3 text-center text-gray-400">Новостей пока нет</div>'; return; }
+                    container.innerHTML = news.slice(0, 6).map(n => `
+                        <a href="${n.url}" target="_blank" rel="noopener" class="block bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow">
+                            <span class="text-xs text-gray-400">${n.source}</span>
+                            <p class="text-gray-800 font-medium mt-1 leading-snug">${n.title}</p>
+                        </a>
+                    `).join('');
+                })
+                .catch(() => { container.innerHTML = '<div class="col-span-3 text-center text-gray-400">Не удалось загрузить новости</div>'; });
         })();
     </script>
 </body>
